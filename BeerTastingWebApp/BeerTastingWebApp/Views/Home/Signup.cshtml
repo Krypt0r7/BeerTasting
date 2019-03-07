@@ -1,0 +1,33 @@
+﻿@model BeerTastingWebApp.Models.User
+
+@{
+    ViewData["Title"] = "Signup";
+}
+
+<div class="inlog-form">
+    <form>
+        <h2>Signup</h2>
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" type="text" asp-for="Name" placeholder="Enter your name" />
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" type="text" asp-for="Email" placeholder="Enter your email" />
+        </div>
+        <div class="form-group">
+            <label>User name</label>
+            <input class="form-control" type="text" asp-for="UserName" placeholder="Enter your username" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input class="form-control" type="text" asp-for="Password" placeholder="Enter your password" />
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" /> Remember me
+            </label>
+        </div>
+        <button type="submit" asp-action="" asp- class="btn btn-default">Log in</button>
+    </form>
+</div>
