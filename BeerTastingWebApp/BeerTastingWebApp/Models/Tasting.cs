@@ -8,7 +8,6 @@ namespace BeerTastingWebApp.Models
 {
     public class Tasting
     {
-        
         [Key]
         public int ID { get; set; }
         public string Name { get; set;}
@@ -18,7 +17,9 @@ namespace BeerTastingWebApp.Models
             get { return datecreated ?? DateTime.Now; }
             set { datecreated = value; }
         }
-        public List<User> Participants { get; set; }
-        public User Creator { get; set; }
+
+        public ICollection<User> Participants { get; set; }
+        public ICollection<Beer> Beers { get; set; }
+        public User SessionMeister { get; set; }
     }
 }

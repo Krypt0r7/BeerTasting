@@ -10,6 +10,14 @@ namespace BeerTastingWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDBContext _dbContext;
+
+        public HomeController(AppDBContext dBContext)
+        {
+            _dbContext = dBContext;
+        }
+
+
         public IActionResult Index()
         {
             return View();
@@ -27,10 +35,17 @@ namespace BeerTastingWebApp.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        [Route("signup")]
+        public IActionResult SignupVal(User user)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+
+            return Redirect("tasting");
         }
     }
 }

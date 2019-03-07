@@ -10,7 +10,12 @@ namespace BeerTastingWebApp.Models
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-
         }
-    }
+        
+        public DbSet<Beer> Beer { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Tasting> Tasting { get; set; }
+
+    } 
+    
 }

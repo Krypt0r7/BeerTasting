@@ -14,6 +14,7 @@ namespace BeerTastingWebApp.Models
         public string Name { get; set; }
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         private DateTime? signedUp;
         public DateTime SignedUp
@@ -21,6 +22,6 @@ namespace BeerTastingWebApp.Models
             get { return signedUp ?? DateTime.Now; }
             set { signedUp = value; }
         }
-        public List<Tasting> Tastings { get; set; }
+        public ICollection<Tasting> Tastings { get; set; }
     }
 }
