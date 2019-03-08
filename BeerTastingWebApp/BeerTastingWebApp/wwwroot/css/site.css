@@ -71,6 +71,10 @@ ul, li {
     margin-bottom: 15px;
 }
 
+.inlog-form form{
+    margin-bottom: 10px;
+}
+
 @media(max-width: 768px){
     .inlog-form{
         width: 100%;

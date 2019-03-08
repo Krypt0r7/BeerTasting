@@ -37,7 +37,7 @@ namespace BeerTastingWebApp
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDBContext>(options => options
-                .UseSqlServer(connection, b => b.MigrationsAssembly("DataLayer")));
+                .UseSqlServer(connection, b => b.MigrationsAssembly("BeerTastingWebApp")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
