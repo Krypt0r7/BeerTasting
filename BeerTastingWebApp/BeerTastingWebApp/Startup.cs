@@ -35,9 +35,11 @@ namespace BeerTastingWebApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var connection = Configuration.GetConnectionString("DefaultConnection");
+            
+            // Add framework services.
+            services.AddMvc();
             services.AddDbContext<AppDBContext>(options => options
-                .UseSqlServer(connection, b => b.MigrationsAssembly("BeerTastingWebApp")));
+                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -36,16 +36,17 @@ namespace BeerTastingWebApp.Controllers
         }
 
         [HttpPost]
-        [Route("signup")]
+        [ValidateAntiForgeryToken]
         public IActionResult SignupVal(User user)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                _dbContext.Add(user);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Tasting");
             }
 
-
-            return Redirect("tasting");
+            return View(user);
         }
     }
 }
