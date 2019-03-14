@@ -18,7 +18,7 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-custom">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -33,8 +33,8 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Link</a></li>
+                    <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+                    <li><a asp-action="Index" asp-controller="Tasting">Create new session</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a asp-controller="Home" asp-action="Login">Login</a></li>
@@ -45,8 +45,18 @@
     </nav>
 
     <partial name="_CookieConsentPartial" />
-
-    @RenderBody()
+    <section class="hero">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="hero-content">
+                    <h1>Beer tasting</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        @RenderBody()
+    </div>
     <footer>
         <div class="container">
             <div class="row">
@@ -87,7 +97,7 @@
                 </div>
             </div>
         </div>
-        </footer>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeerTastingWebApp.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,11 +14,11 @@ namespace BeerTastingWebApp.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
-                    SignedUp = table.Column<DateTime>(nullable: false)
+                    SignedUp = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -32,7 +32,8 @@ namespace BeerTastingWebApp.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
+                    Password = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
                     SessionMeisterID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -71,6 +72,27 @@ namespace BeerTastingWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Participant",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    TastingID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Participant", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Participant_Tasting_TastingID",
+                        column: x => x.TastingID,
+                        principalTable: "Tasting",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserTasting",
                 columns: table => new
                 {
@@ -100,6 +122,11 @@ namespace BeerTastingWebApp.Migrations
                 column: "TastingID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Participant_TastingID",
+                table: "Participant",
+                column: "TastingID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasting_SessionMeisterID",
                 table: "Tasting",
                 column: "SessionMeisterID");
@@ -114,6 +141,9 @@ namespace BeerTastingWebApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Beer");
+
+            migrationBuilder.DropTable(
+                name: "Participant");
 
             migrationBuilder.DropTable(
                 name: "UserTasting");

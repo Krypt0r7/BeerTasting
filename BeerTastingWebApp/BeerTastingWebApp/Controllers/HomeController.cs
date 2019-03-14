@@ -39,7 +39,7 @@ namespace BeerTastingWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SignupVal(User user)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _dbContext.Add(user);
                 _dbContext.SaveChanges();

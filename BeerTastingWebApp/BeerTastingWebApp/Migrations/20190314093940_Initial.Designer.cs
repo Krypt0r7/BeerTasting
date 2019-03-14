@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeerTastingWebApp.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20190308111702_AutoDate3")]
-    partial class AutoDate3
+    [Migration("20190314093940_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,17 +46,38 @@ namespace BeerTastingWebApp.Migrations
                     b.ToTable("Beer");
                 });
 
+            modelBuilder.Entity("BeerTastingWebApp.Models.Participant", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("TastingID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("TastingID");
+
+                    b.ToTable("Participant");
+                });
+
             modelBuilder.Entity("BeerTastingWebApp.Models.Tasting", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime?>("DateCreated")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("Password");
 
                     b.Property<int?>("SessionMeisterID");
 
@@ -79,9 +100,12 @@ namespace BeerTastingWebApp.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<DateTime>("SignedUp");
+                    b.Property<DateTime>("SignedUp")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -108,6 +132,13 @@ namespace BeerTastingWebApp.Migrations
                         .HasForeignKey("TastingID");
                 });
 
+            modelBuilder.Entity("BeerTastingWebApp.Models.Participant", b =>
+                {
+                    b.HasOne("BeerTastingWebApp.Models.Tasting", "Tasting")
+                        .WithMany("Partisipants")
+                        .HasForeignKey("TastingID");
+                });
+
             modelBuilder.Entity("BeerTastingWebApp.Models.Tasting", b =>
                 {
                     b.HasOne("BeerTastingWebApp.Models.User", "SessionMeister")
@@ -118,7 +149,7 @@ namespace BeerTastingWebApp.Migrations
             modelBuilder.Entity("BeerTastingWebApp.Models.UserTasting", b =>
                 {
                     b.HasOne("BeerTastingWebApp.Models.Tasting", "Tasting")
-                        .WithMany("Participants")
+                        .WithMany("Users")
                         .HasForeignKey("TastingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
