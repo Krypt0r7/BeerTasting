@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeerTastingWebApp.Migrations
 {
-    public partial class Initial : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,7 @@ namespace BeerTastingWebApp.Migrations
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
+                    UserTag = table.Column<Guid>(nullable: false),
                     SignedUp = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
@@ -34,6 +35,7 @@ namespace BeerTastingWebApp.Migrations
                     Name = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
+                    TastingTag = table.Column<Guid>(nullable: false),
                     SessionMeisterID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

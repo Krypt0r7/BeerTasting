@@ -13,6 +13,7 @@ namespace BeerTastingWebApp.Models
         public string Name { get; set;}
         public string Password { get; set; }
         public DateTime? DateCreated { get; private set; }
+        public Guid TastingTag { get; set; }
 
         public ICollection<Participant> Partisipants { get; set; }
         public ICollection<UserTasting> Users { get; set; }

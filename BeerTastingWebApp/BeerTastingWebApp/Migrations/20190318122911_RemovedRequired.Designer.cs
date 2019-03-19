@@ -4,14 +4,16 @@ using BeerTastingWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BeerTastingWebApp.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190318122911_RemovedRequired")]
+    partial class RemovedRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +73,7 @@ namespace BeerTastingWebApp.Migrations
 
                     b.Property<DateTime?>("DateCreated")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Name");
 
@@ -104,7 +106,7 @@ namespace BeerTastingWebApp.Migrations
 
                     b.Property<DateTime>("SignedUp")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("UserName");
 

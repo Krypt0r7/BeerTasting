@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeerTastingWebApp.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20190314093940_Initial")]
-    partial class Initial
+    [Migration("20190318085044_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -81,6 +81,8 @@ namespace BeerTastingWebApp.Migrations
 
                     b.Property<int?>("SessionMeisterID");
 
+                    b.Property<Guid>("TastingTag");
+
                     b.HasKey("ID");
 
                     b.HasIndex("SessionMeisterID");
@@ -106,6 +108,8 @@ namespace BeerTastingWebApp.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired();
+
+                    b.Property<Guid>("UserTag");
 
                     b.HasKey("ID");
 

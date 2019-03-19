@@ -44,6 +44,8 @@ namespace BeerTastingWebApp
                 options.Cookie.IsEssential = true;
             });
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSignalR();

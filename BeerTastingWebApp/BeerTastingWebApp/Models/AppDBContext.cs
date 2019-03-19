@@ -21,9 +21,9 @@ namespace BeerTastingWebApp.Models
             modelBuilder.Entity<UserTasting>().HasOne(us => us.Tasting).WithMany(t => t.Users).HasForeignKey(f => f.TastingId);
 
 
-            modelBuilder.Entity<Tasting>().Property("DateCreated").HasDefaultValueSql("getdate()");
+            modelBuilder.Entity<Tasting>().Property("DateCreated").HasDefaultValueSql("getutcdate()");
 
-            modelBuilder.Entity<User>().Property("SignedUp").HasDefaultValueSql("getdate()");
+            modelBuilder.Entity<User>().Property("SignedUp").HasDefaultValueSql("getutcdate()");
         }
 
         public DbSet<Beer> Beer { get; set; }
