@@ -24,8 +24,8 @@ connection.start().then(function () {
 document.getElementById("participantButton").addEventListener("click", function (event) {
     var name = document.getElementById("namePart").value;
     var email = document.getElementById("emailPart").value;
-
-    connection.invoke("NewParticipant", name, email).catch(function (err) {
+    var tasting = document.getElementById("tastingId").value;
+    connection.invoke("NewParticipant", name, email, tasting).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();

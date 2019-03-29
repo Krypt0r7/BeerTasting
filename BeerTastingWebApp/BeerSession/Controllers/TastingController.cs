@@ -13,7 +13,7 @@ namespace BeerSession.Controllers
     public class TastingController : Controller
     {
         private readonly ApplicationDbContext appContext;
-        private UserManager<IdentityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public TastingController(ApplicationDbContext _appContext, UserManager<IdentityUser> usermanager)
         {
@@ -29,8 +29,10 @@ namespace BeerSession.Controllers
         }
 
 
-        public IActionResult AddParticipants()
+        public async Task<IActionResult> AddParticipants()
         {
+            //var user = await _userManager.GetUserAsync(HttpContext);
+
             return View();
         }
 
@@ -52,7 +54,7 @@ namespace BeerSession.Controllers
 
                 Response.Cookies.Append("Tasting", tasting.TastingTag.ToString());
             }
-            return RedirectToAction("AddParticipant");
+            return RedirectToAction("AddParticipants", tasting);
         }
     }
 }

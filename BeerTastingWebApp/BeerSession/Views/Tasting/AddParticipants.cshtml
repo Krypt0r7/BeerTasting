@@ -1,4 +1,4 @@
-﻿@model BeerSession.Models.Participant
+﻿@model BeerSession.Models.Tasting
 
 @{
     ViewData["Title"] = "AddParticipants";
@@ -16,6 +16,7 @@
                 <label>Email</label>
                 <input id="emailPart" class="form-control" />
             </div>
+            <input type="hidden" value="@Model.TastingTag" id="tastingId" />
             <input type="button" id="participantButton" class="btn btn-default" value="Add participant"/>
         </div>
     </div>

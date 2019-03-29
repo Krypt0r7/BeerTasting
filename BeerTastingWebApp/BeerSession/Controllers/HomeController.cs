@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BeerSession.Models;
 using Microsoft.AspNetCore.Identity;
+using BeerSession.Data;
 
 namespace BeerSession.Controllers
 {
     public class HomeController : Controller
     {
-        private UserManager<IdentityUser> _userManager;
-        public HomeController(UserManager<IdentityUser> usermanager)
+        private UserManager<IdentityUser> userManager;
+        private ApplicationDbContext appContext;
+        public HomeController(UserManager<IdentityUser> _usermanager, ApplicationDbContext _appContext)
         {
-            _userManager = usermanager;
+            userManager = _usermanager;
+            appContext = _appContext;
         }
 
 
         public async Task<IActionResult> Index()
         {
-            var userID = await _userManager.GetUserAsync(HttpContext.User);
+            var userID = await userManager.GetUserAsync(HttpContext.User);
             if (userID != null)
             {
                 var user = new User
@@ -29,6 +32,9 @@ namespace BeerSession.Controllers
                     Email = userID.Email,
                     UserIdentity = userID.Id
                 };
+
+                appContext.Add(user);
+                appContext.SaveChanges();
             }
 
             return View();

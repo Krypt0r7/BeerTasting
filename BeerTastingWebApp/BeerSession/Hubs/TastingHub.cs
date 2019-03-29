@@ -17,12 +17,14 @@ namespace BeerSession.Hubs
             dbContext = _dbContext;
         }
 
-        public async Task NewParticipant(string name, string email)
+        public async Task NewParticipant(string name, string email, string tasting)
         {
+            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tasting);
             var newPart = new Participant
             {
                 Name = name,
-                Email = email
+                Email = email,
+                Tasting = tastingObject
             };
 
             dbContext.Add(newPart);
