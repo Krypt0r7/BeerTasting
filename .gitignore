@@ -331,4 +331,4 @@ ASALocalRun/
 
 
 # ASP.NET appsettings
-.appsettings
+appsettings.json
