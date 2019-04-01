@@ -4,8 +4,8 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/tastinghub").build
 
 document.getElementById("participantButton").disabled = true;
 
-connection.on("RemoveParticipant", function () {
-    
+connection.on("RemoveParticipant", function (name) {
+    document.getElementById(name).remove();
 });
 
 connection.on("GetParticipant", function (name, email) {
@@ -62,4 +62,3 @@ document.getElementById("participantButton").addEventListener("click", function 
     });
     event.preventDefault();
 })
-

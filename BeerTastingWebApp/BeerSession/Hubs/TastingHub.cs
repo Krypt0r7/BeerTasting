@@ -1,6 +1,7 @@
 ﻿using BeerSession.Data;
 using BeerSession.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,16 +36,15 @@ namespace BeerSession.Hubs
 
         public async Task RemoveThePart(string name, string tastingId)
         {
-            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tastingId);
+            var tastingObject = dbContext.Tasting.Include(i => i.Participants).First(z => z.TastingTag.ToString() == tastingId);
 
-            foreach (var item in tastingObject.Participants)
+            var participant = tastingObject.Participants.First(p => p.Name == name);
+
+            if (participant != null)
             {
-                if (item.Name == name)
-                {
-                    dbContext.Remove(item);
-                    await dbContext.SaveChangesAsync();
-                    await Clients.All.SendAsync("RemoveParticipant", name);
-                }
+                dbContext.Remove(participant);
+                await dbContext.SaveChangesAsync();
+                await Clients.All.SendAsync("RemoveParticipant", name);
             }
         }
     }
