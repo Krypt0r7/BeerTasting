@@ -17,9 +17,9 @@ namespace BeerSession.Hubs
             dbContext = _dbContext;
         }
 
-        public async Task NewParticipant(string name, string email, string tasting)
+        public async Task NewParticipant(string name, string email, string tastingId)
         {
-            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tasting);
+            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tastingId);
             var newPart = new Participant
             {
                 Name = name,
@@ -31,6 +31,21 @@ namespace BeerSession.Hubs
             await dbContext.SaveChangesAsync();
 
             await Clients.All.SendAsync("GetParticipant", name, email);
+        }
+
+        public async Task RemoveThePart(string name, string tastingId)
+        {
+            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tastingId);
+
+            foreach (var item in tastingObject.Participants)
+            {
+                if (item.Name == name)
+                {
+                    dbContext.Remove(item);
+                    await dbContext.SaveChangesAsync();
+                    await Clients.All.SendAsync("RemoveParticipant", name);
+                }
+            }
         }
     }
 }

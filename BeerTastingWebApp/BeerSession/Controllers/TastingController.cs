@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BeerSession.Data;
 using BeerSession.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeerSession.Controllers
 {
+    [Authorize]
     public class TastingController : Controller
     {
         private readonly ApplicationDbContext appContext;
@@ -21,19 +23,16 @@ namespace BeerSession.Controllers
             _userManager = usermanager;
         }
 
-      
-
         public IActionResult Index()
         {
             return View();
         }
 
 
-        public async Task<IActionResult> AddParticipants()
+        public IActionResult AddParticipants(Tasting tasting)
         {
-            //var user = await _userManager.GetUserAsync(HttpContext);
 
-            return View();
+            return View(tasting);
         }
 
         [HttpPost]
@@ -46,11 +45,16 @@ namespace BeerSession.Controllers
                 var userDB = appContext.User.First(x => x.UserIdentity == user.Id);
 
                 tasting.TastingTag = Guid.NewGuid();
-
                 tasting.SessionMeister = userDB;
 
-                appContext.Add(tasting);
-                appContext.SaveChanges();
+                var newUserTaste = new UserTasting
+                {
+                    Tasting = tasting,
+                    User = userDB
+                };
+                await appContext.AddAsync(newUserTaste);
+                await appContext.AddAsync(tasting);
+                await appContext.SaveChangesAsync();
 
                 Response.Cookies.Append("Tasting", tasting.TastingTag.ToString());
             }

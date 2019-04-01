@@ -24,17 +24,23 @@ namespace BeerSession.Controllers
         public async Task<IActionResult> Index()
         {
             var userID = await userManager.GetUserAsync(HttpContext.User);
+
             if (userID != null)
             {
-                var user = new User
+                var oldUser = appContext.User.First(o => o.UserIdentity == userID.Id);
+                if (oldUser == null)
                 {
-                    Name = userID.UserName,
-                    Email = userID.Email,
-                    UserIdentity = userID.Id
-                };
+                    var user = new User
+                    {
+                        UserName = userID.UserName,
+                        Name = userID.UserName,
+                        Email = userID.Email,
+                        UserIdentity = userID.Id
+                    };
 
-                appContext.Add(user);
-                appContext.SaveChanges();
+                    appContext.Add(user);
+                    appContext.SaveChanges();
+                }
             }
 
             return View();
