@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeerSession.Controllers
 {
@@ -23,7 +24,43 @@ namespace BeerSession.Controllers
             _userManager = usermanager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            var userDb = appContext.User.Include(i => i.Tastings).FirstOrDefault(f => f.UserIdentity == user.Id);
+            if (userDb == null)
+            {
+                var newUser = new User
+                {
+                    UserName = user.UserName,
+                    Name = user.UserName,
+                    Email = user.Email,
+                    UserIdentity = user.Id
+                };
+
+                appContext.Add(newUser);
+                await appContext.SaveChangesAsync();
+            }
+            
+            if (userDb.Tastings.Count > 0)
+            {
+                return View();
+            }
+
+            return RedirectToAction("NewTasting");
+        }
+
+        public async Task<IActionResult> MyTasting()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var dbUser = appContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
+
+            return View(dbUser);
+        }
+
+        [HttpGet]
+        public IActionResult NewTasting()
         {
             return View();
         }
@@ -31,8 +68,26 @@ namespace BeerSession.Controllers
 
         public IActionResult AddParticipants(Tasting tasting)
         {
+            var taste = appContext.Tasting.Include(g => g.Participants).First(f => f.TastingTag == tasting.TastingTag);
+            return View(taste);
+        }
 
-            return View(tasting);
+        public IActionResult GetTasting(string tastingId)
+        {
+            var tasting = appContext.Tasting.First(f => f.TastingTag.ToString() == tastingId);
+            return RedirectToAction("AddParticipants", tasting);
+        }
+
+        public async Task<IActionResult> RemoveTasting(string tastingId)
+        {
+            var tasting = appContext.Tasting.Include(i => i.Participants).First(f => f.TastingTag.ToString() == tastingId);
+            foreach (var item in tasting.Participants)
+            {
+                appContext.Remove(item);
+            }
+            appContext.Remove(tasting);
+            await appContext.SaveChangesAsync();
+            return RedirectToAction("MyTasting");
         }
 
         [HttpPost]
@@ -57,8 +112,9 @@ namespace BeerSession.Controllers
                 await appContext.SaveChangesAsync();
 
                 Response.Cookies.Append("Tasting", tasting.TastingTag.ToString());
+                return RedirectToAction("AddParticipants", tasting);
             }
-            return RedirectToAction("AddParticipants", tasting);
+            return View(tasting);
         }
     }
 }

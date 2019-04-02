@@ -1,0 +1,38 @@
+﻿@model BeerSession.Models.User
+@{
+    ViewData["Title"] = "MyTasting";
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Enter</th>
+            <th scope="col">Remove</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Tastings)
+        {
+        <tr>
+            <th scope="row">@item.Tasting.ID</th>
+            <td>@item.Tasting.Name</td>
+            <td>
+                <form method="post" asp-action="GetTasting" asp-controller="Tasting">
+                    <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                    <button type="submit" class="btn btn-default">Show tasting</button>
+                </form>
+            </td>
+            <td>
+                <form method="post" asp-action="RemoveTasting" asp-controller="Tasting">
+                    <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                    <button type="submit" class="btn btn-default">Remove tasting</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

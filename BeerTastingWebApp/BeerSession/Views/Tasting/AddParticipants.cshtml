@@ -19,23 +19,27 @@
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
             <input type="button" id="participantButton" class="btn btn-default" value="Add participant"/>
         </div>
+        <div>
+            <input asp-action="AddBeers" type="button" value="I'm done, next step!" class="btn btn-default" />
+        </div>
     </div>
 
     <div class="col-8">
         <div id="participantList">
-            @*@if (Model.Participants.Count > 0)
+            <h2>Added participants</h2>
+            @if (Model.Participants != null)
             {
                 @foreach (var item in Model.Participants)
                 {
                     <div id="@item.Name" class="card participant-card">
-                        <div class="card-body">'
+                        <div class="card-body">
                             <h5 class="card-title" id="part-name">@item.Name</h5>
-                            <input id="email" type="hidden" value="@item.Email">
-                            <input class="btn btn-default" type="button" id="@item.Name" value="Remove participant">
+                            <input id="email" type="hidden" value="@item.Email" />
+                            <input class="btn btn-default" type="button" id="@item.Name" value="Remove participant" />
                         </div>
                     </div>
                 }
-            }*@
+            }
         </div>
     </div>
 </div>

@@ -27,7 +27,7 @@ namespace BeerSession.Controllers
 
             if (userID != null)
             {
-                var oldUser = appContext.User.First(o => o.UserIdentity == userID.Id);
+                var oldUser = appContext.User.FirstOrDefault(o => o.UserIdentity == userID.Id);
                 if (oldUser == null)
                 {
                     var user = new User
@@ -39,7 +39,7 @@ namespace BeerSession.Controllers
                     };
 
                     appContext.Add(user);
-                    appContext.SaveChanges();
+                    await appContext.SaveChangesAsync();
                 }
             }
 

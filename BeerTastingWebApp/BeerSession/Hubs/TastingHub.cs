@@ -28,6 +28,7 @@ namespace BeerSession.Hubs
                 Tasting = tastingObject
             };
 
+
             dbContext.Add(newPart);
             await dbContext.SaveChangesAsync();
 
