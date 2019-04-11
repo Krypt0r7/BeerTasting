@@ -14,7 +14,7 @@ namespace BeerSession.Models
         public string Password { get; set; }
         public DateTime? DateCreated { get; private set; }
         public Guid TastingTag { get; set; }
-
+        public TastingRoom TastingRoom { get; set; }
         public ICollection<Participant> Participants { get; set; }
         public ICollection<UserTasting> Users { get; set; }
         public ICollection<Beer> Beers { get; set; }

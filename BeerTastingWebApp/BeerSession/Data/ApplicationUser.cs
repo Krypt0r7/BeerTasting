@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BeerSession.Models
 {
-    public class User
+    public class ApplicationUser
     {
         [Key]
         public int ID { get; set; }
@@ -17,6 +17,5 @@ namespace BeerSession.Models
         public string Email { get; set; }
         public DateTime SignedUp { get; private set; }
         public IList<UserTasting> Tastings { get; set; }
-        public ICollection<Connection> Connections { get; set; }
     }
 }

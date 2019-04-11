@@ -12,8 +12,8 @@ namespace BeerSession.Controllers
 {
     public class HomeController : Controller
     {
-        private UserManager<IdentityUser> userManager;
-        private ApplicationDbContext appContext;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly ApplicationDbContext appContext;
         public HomeController(UserManager<IdentityUser> _usermanager, ApplicationDbContext _appContext)
         {
             userManager = _usermanager;
@@ -30,7 +30,7 @@ namespace BeerSession.Controllers
                 var oldUser = appContext.User.FirstOrDefault(o => o.UserIdentity == userID.Id);
                 if (oldUser == null)
                 {
-                    var user = new User
+                    var user = new ApplicationUser
                     {
                         UserName = userID.UserName,
                         Name = userID.UserName,

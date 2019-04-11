@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BeerSession.Models;
+﻿using BeerSession.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,5 +31,7 @@ namespace BeerSession.Data
         public DbSet<Tasting> Tasting { get; set; }
         public DbSet<Participant> Participant { get; set; }
         public DbSet<UserTasting> UserTasting { get; set; }
+        public DbSet<Connection> Connection { get; set; }
+        public DbSet<TastingRoom> TastingRoom { get; set; }
     }
 }

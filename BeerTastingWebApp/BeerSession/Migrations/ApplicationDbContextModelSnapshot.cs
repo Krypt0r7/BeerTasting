@@ -4,51 +4,28 @@ using BeerSession.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BeerSession.Data.Migrations
+namespace BeerSession.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190402123350_ChangeNameOfUser")]
-    partial class ChangeNameOfUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BeerSession.Models.AppUser", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("Name");
-
-                    b.Property<DateTime>("SignedUp")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<string>("UserIdentity");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("User");
-                });
 
             modelBuilder.Entity("BeerSession.Models.Beer", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Alchohol");
 
                     b.Property<string>("Country");
 
@@ -67,6 +44,24 @@ namespace BeerSession.Data.Migrations
                     b.HasIndex("TastingID");
 
                     b.ToTable("Beer");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.Connection", b =>
+                {
+                    b.Property<string>("ConnectionID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Connected");
+
+                    b.Property<string>("UserAgent");
+
+                    b.Property<int?>("UserID");
+
+                    b.HasKey("ConnectionID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Connection");
                 });
 
             modelBuilder.Entity("BeerSession.Models.Participant", b =>
@@ -111,6 +106,47 @@ namespace BeerSession.Data.Migrations
                     b.HasIndex("SessionMeisterID");
 
                     b.ToTable("Tasting");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.TastingRoom", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RoomName");
+
+                    b.Property<int>("TastingId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("TastingId")
+                        .IsUnique();
+
+                    b.ToTable("TastingRoom");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.User", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("SignedUp")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<string>("UserIdentity");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>
@@ -293,9 +329,16 @@ namespace BeerSession.Data.Migrations
 
             modelBuilder.Entity("BeerSession.Models.Beer", b =>
                 {
-                    b.HasOne("BeerSession.Models.Tasting")
+                    b.HasOne("BeerSession.Models.Tasting", "Tasting")
                         .WithMany("Beers")
                         .HasForeignKey("TastingID");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.Connection", b =>
+                {
+                    b.HasOne("BeerSession.Models.User")
+                        .WithMany("Connections")
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("BeerSession.Models.Participant", b =>
@@ -307,9 +350,17 @@ namespace BeerSession.Data.Migrations
 
             modelBuilder.Entity("BeerSession.Models.Tasting", b =>
                 {
-                    b.HasOne("BeerSession.Models.AppUser", "SessionMeister")
+                    b.HasOne("BeerSession.Models.User", "SessionMeister")
                         .WithMany()
                         .HasForeignKey("SessionMeisterID");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.TastingRoom", b =>
+                {
+                    b.HasOne("BeerSession.Models.Tasting", "Tasting")
+                        .WithOne("TastingRoom")
+                        .HasForeignKey("BeerSession.Models.TastingRoom", "TastingId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>
@@ -319,7 +370,7 @@ namespace BeerSession.Data.Migrations
                         .HasForeignKey("TastingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BeerSession.Models.AppUser", "User")
+                    b.HasOne("BeerSession.Models.User", "User")
                         .WithMany("Tastings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

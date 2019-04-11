@@ -35,7 +35,9 @@ connection.on("GetParticipant", function (name, email) {
     link.setAttribute("value", "Remove participant");
     cardBody.appendChild(link);
     document.getElementById("participantList").appendChild(wrapper);
-    link.onclick = removePart;
+    link.onclick = function () {
+        removePart(link)
+    }
 });
 
 connection.start().then(function () {
@@ -44,8 +46,8 @@ connection.start().then(function () {
     return console.error(err.toString());
     });
 
-function removePart() {
-    var name = this.id;
+function removePart(link) {
+    var name = link.id;
     var tastingId = document.getElementById("tastingId").value;
     connection.invoke("RemoveThePart", name, tastingId).catch(function (err) {
         return console.error(err.toString());
@@ -61,4 +63,11 @@ document.getElementById("participantButton").addEventListener("click", function 
         return console.error(err.toString());
     });
     event.preventDefault();
-})
+});
+
+//connection.connectionState = function () {
+//    var tastingId = document.getElementById("tastingId").value;
+//    connection.invoke("CreateRoom", tastingId).catch(function (err) {
+//        return console.error(err.toString());
+//    });
+//};

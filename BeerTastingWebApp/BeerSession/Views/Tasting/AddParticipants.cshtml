@@ -19,8 +19,11 @@
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
             <input type="button" id="participantButton" class="btn btn-default" value="Add participant"/>
         </div>
-        <div>
-            <input asp-action="AddBeers" type="button" value="I'm done, next step!" class="btn btn-default" />
+        <div class="mt-4">
+            <form asp-action="AddBeers" asp-controller="Tasting" method="post">
+                <input name="tastingId" type="hidden" value="@Model.TastingTag.ToString()" />
+                <input type="submit" value="I'm done, now add beers!" class="btn btn-default" />
+            </form>
         </div>
     </div>
 
@@ -35,7 +38,7 @@
                         <div class="card-body">
                             <h5 class="card-title" id="part-name">@item.Name</h5>
                             <input id="email" type="hidden" value="@item.Email" />
-                            <input class="btn btn-default" type="button" id="@item.Name" value="Remove participant" />
+                            <input class="btn btn-default" onclick="removePart(this)" type="button" id="@item.Name" value="Remove participant" />
                         </div>
                     </div>
                 }
