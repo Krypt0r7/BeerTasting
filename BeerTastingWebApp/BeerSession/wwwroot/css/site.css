@@ -7,6 +7,17 @@
   font-family: sans-serif;
 }
 
+main{
+  max-width: 70em;
+  display: flex;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.space-bottom{
+  margin-block-end: 1.5em;
+}
+
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
@@ -23,18 +34,6 @@ accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
-}
 
 .participant-card{
     width: 15rem;
@@ -102,7 +101,7 @@ accept-policy {
   text-align: center;
 }
 
-button{
+.button{
   border-radius: 5px;
   border: none;
   margin-block-end: 2em;
@@ -153,11 +152,24 @@ button.close {
   list-style: none;
 }
 
-#first-links{
+.first-links{
   margin-right: auto;
+}
+
+.first-links li{
+  margin-inline-start: 1em;
 }
 
 .main-navigation{
   display: flex;
-  
+  width: 100%;
+}
+
+.login-bar{
+  display: flex;
+
+}
+
+.login-bar li{
+  margin-inline-start: 1em;
 }
