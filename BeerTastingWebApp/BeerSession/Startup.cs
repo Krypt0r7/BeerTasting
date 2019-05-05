@@ -14,6 +14,9 @@ using BeerSession.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using BeerSession.Hubs;
+using BeerSession.Data.BeerService;
+using BeerSession.Data.TastingService;
+using BeerSession.Data.ParticipantService;
 
 namespace BeerSession
 {
@@ -38,8 +41,7 @@ namespace BeerSession
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]), ServiceLifetime.Transient);
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -48,7 +50,9 @@ namespace BeerSession
             services.AddSignalR();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            services.AddTransient<IBeerGetter, BeerGetter>();
+            services.AddTransient<ITastingService, TastingService>();
+            services.AddTransient<IParticipantTools, ParticipantTools>();
             services.AddDistributedMemoryCache();
             services.AddSession(option =>
             {

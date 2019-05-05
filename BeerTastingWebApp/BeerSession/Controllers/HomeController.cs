@@ -30,7 +30,7 @@ namespace BeerSession.Controllers
                 var oldUser = appContext.User.FirstOrDefault(o => o.UserIdentity == userID.Id);
                 if (oldUser == null)
                 {
-                    var user = new ApplicationUser
+                    var user = new User
                     {
                         UserName = userID.UserName,
                         Name = userID.UserName,

@@ -65,7 +65,10 @@
 
         <div class="mt-4 nav-buttons">
             <input onclick="goBack()" value="Go back" type="button" class="btn btn-outline-secondary"  />
-            <input id="nextStep" asp-action="AddBeers" type="button" value="I'm done, next step!" class="btn btn-default" />
+            <form asp-action="Session">
+                <input type="hidden" name="tastingId" value="@Model.TastingTag" />
+                <input id="nextStep" type="submit" value="I'm done. Let's GO!" class="btn btn-default" />
+            </form>
         </div>
     </div>
 

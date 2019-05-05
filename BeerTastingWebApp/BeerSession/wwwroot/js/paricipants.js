@@ -38,10 +38,14 @@ connection.on("GetParticipant", function (name, email) {
     link.onclick = function () {
         removePart(link)
     }
+
+    document.getElementById("namePart").value = "";
+    document.getElementById("emailPart").value = "";
 });
 
 connection.start().then(function () {
     document.getElementById("participantButton").disabled = false;
+    setupGroup();
 }).catch(function (err) {
     return console.error(err.toString());
     });
@@ -65,9 +69,9 @@ document.getElementById("participantButton").addEventListener("click", function 
     event.preventDefault();
 });
 
-//connection.connectionState = function () {
-//    var tastingId = document.getElementById("tastingId").value;
-//    connection.invoke("CreateRoom", tastingId).catch(function (err) {
-//        return console.error(err.toString());
-//    });
-//};
+function setupGroup() {
+    var tastingId = document.getElementById("tastingId").value;
+    connection.invoke("CreateRoom", tastingId).catch(function (err) {
+        return console.error(err.toString());
+    });
+}

@@ -1,0 +1,42 @@
+﻿@model  BeerSession.Models.Tasting
+@{
+    ViewData["Title"] = "Session";
+}
+<div class="layout">
+    <h1 class="header-text">Grand total</h1>
+    <div class="content-layout">
+        <div class="buttons">
+            <button type="submit" name="addMoreParticipantButton">Add more participants</button>
+            <button type="submit" name="addMoreBeersButton">Add more beers</button>
+        </div>
+        <div class="content">
+            <h2>Participants</h2>
+            <div id="participantsInSession">
+                @foreach (var item in @Model.Participants)
+                {
+                    <div id="@item.Name" class="card participant-card">
+                        <div class="card-body">
+                            <h5 class="card-title" id="part-name">@item.Name</h5>
+                            <p>@item.Email</p>
+                            <input id="email" type="hidden" value="@item.Email" />
+                        </div>
+                    </div>
+                }
+            </div>
+            <h2>Beers</h2>
+            <div id="beersInSession">
+                @foreach (var item in @Model.Beers)
+                {
+                    <div id="@item.ID" class="card participant-card">
+                        <div class="card-body">
+                            <h5 class="card-title" id="beer-name">@item.Name</h5>
+                            <p>@item.Producer - @item.Country</p>
+                            <p>@item.Price kr | @item.Alchohol%</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <button type="submit">Start the session</button>
+</div>

@@ -31,7 +31,5 @@ namespace BeerSession.Data
         public DbSet<Tasting> Tasting { get; set; }
         public DbSet<Participant> Participant { get; set; }
         public DbSet<UserTasting> UserTasting { get; set; }
-        public DbSet<Connection> Connection { get; set; }
-        public DbSet<TastingRoom> TastingRoom { get; set; }
     }
 }

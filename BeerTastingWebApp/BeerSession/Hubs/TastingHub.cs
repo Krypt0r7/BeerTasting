@@ -1,4 +1,6 @@
 ﻿using BeerSession.Data;
+using BeerSession.Data.BeerService;
+using BeerSession.Data.ParticipantService;
 using BeerSession.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,10 +18,14 @@ namespace BeerSession.Hubs
     public class TastingHub : Hub
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IBeerGetter beerGetter;
+        private readonly IParticipantTools participantTools;
 
-        public TastingHub(ApplicationDbContext _dbContext)
+        public TastingHub(ApplicationDbContext _dbContext, IBeerGetter _beerGetter, IParticipantTools _participantTools)
         {
+            beerGetter = _beerGetter;
             dbContext = _dbContext;
+            participantTools = _participantTools;
         }
 
         public override Task OnConnectedAsync()
@@ -38,44 +44,22 @@ namespace BeerSession.Hubs
 
         public async Task NewParticipant(string name, string email, string tastingId)
         {
-            var tastingObject = dbContext.Tasting.First(z => z.TastingTag.ToString() == tastingId);
-            var newPart = new Participant
-            {
-                Name = name,
-                Email = email,
-                Tasting = tastingObject
-            };
-
-            dbContext.Add(newPart);
-            await dbContext.SaveChangesAsync();
-
-            await Clients.All.SendAsync("GetParticipant", name, email);
+            await participantTools.GetParticipantAsync(tastingId, email, name);
+            await Clients.Caller.SendAsync("GetParticipant", name, email);
         }
 
         public async Task CreateRoom(string tastingId)
         { 
-            var room = dbContext.TastingRoom.FirstOrDefault(s => s.TastingId.ToString() == tastingId);
-            if (room == null)
-            {
-                await Groups.AddToGroupAsync(Context.ConnectionId, tastingId);
-            }
+            await Groups.AddToGroupAsync(Context.ConnectionId, tastingId);
         }
 
         public async Task RemoveThePart(string name, string tastingId)
         {
-            var tastingObject = dbContext.Tasting.Include(i => i.Participants).First(z => z.TastingTag.ToString() == tastingId);
-
-            var participant = tastingObject.Participants.First(p => p.Name == name);
-
-            if (participant != null)
-            {
-                dbContext.Remove(participant);
-                await dbContext.SaveChangesAsync();
-                await Clients.All.SendAsync("RemoveParticipant", name);
-            }
+            await participantTools.RemoveParticipant(tastingId, name);
+            await Clients.Caller.SendAsync("RemoveParticipant", name);
         }
 
-        public async Task RemoveSelectedBeer(int id)
+        public async Task RemoveSelectedBeer(int id, string tastingId)
         {
             var theBeer = await dbContext.Beer.FirstAsync(f => f.ID == id);
 
@@ -83,7 +67,7 @@ namespace BeerSession.Hubs
             {
                 dbContext.Remove(theBeer);
                 await dbContext.SaveChangesAsync();
-                await Clients.All.SendAsync("removeBeer", id);
+                await Clients.Group(tastingId).SendAsync("removeBeer", id);
             }
         }
 
@@ -93,7 +77,7 @@ namespace BeerSession.Hubs
             {
                 string response = await client.GetStringAsync("http://localhost:5000/api/systemet/producers/");
 
-                await Clients.All.SendAsync("populateProducers", response);
+                await Clients.Caller.SendAsync("populateProducers", response);
             }
         }
 
@@ -103,18 +87,21 @@ namespace BeerSession.Hubs
             {
                 string response = await client.GetStringAsync($"http://localhost:5000/api/systemet/producers/{producer}/");
 
-                await Clients.All.SendAsync("populateBeers", response);
+                await Clients.Caller.SendAsync("populateBeers", response);
             }
         }
 
-        public async Task GetBeerInfo(string name)
+        public async Task GetBeerInfo(string name, string tastingId)
         {
             string[] split = name.Split(',').Select(s => s.Trim()).ToArray();
+            string response = "";
             using (var client = new HttpClient())
             {
-                string response = await client.GetStringAsync($"http://localhost:5000/api/systemet/beer/{split[0]}");
-                await Clients.All.SendAsync("populateWithBeer", response);
+                response = await client.GetStringAsync($"http://localhost:5000/api/systemet/beer/{split[0]}");
             }
+            var newBeer = await beerGetter.GetBeerAsync(response, tastingId);
+
+            await Clients.Caller.SendAsync("GetBeer", newBeer.Name, newBeer.Producer, newBeer.Country, newBeer.Price, newBeer.SystemetNumber, newBeer.Alchohol, newBeer.ID);
         }
 
         public async Task NewBeer(int sysnum,string tastingId)
@@ -125,34 +112,9 @@ namespace BeerSession.Hubs
             {
                 response = await client.GetStringAsync($"http://localhost:5000/api/systemet/beer/{sysnum}");
             }
+            var newBeer = await beerGetter.GetBeerAsync(response, tastingId);
 
-            var beer = JsonConvert.DeserializeObject<ViewModels.Systemet>(response);
-
-            Beer newBeer = new Beer
-            {
-                Producer = beer.Producent,
-                Country = beer.Land,
-                Price = beer.PrisInkMoms,
-                SystemetNumber = sysnum,
-                Alchohol = beer.Alkoholhalt,
-                Tasting = tastingObject
-            };
-
-            if (beer.Producent.ToLower().Contains(beer.Namn.ToLower())) newBeer.Name = beer.Namn2;
-            else if (beer.Producent.ToLower() == beer.Namn2.ToLower()) newBeer.Name = beer.Namn;
-            else if (beer.Namn.ToLower().StartsWith(beer.Producent.ToLower()))
-            {
-                int length = beer.Producent.Length;
-                string cleanName = beer.Namn.Substring(length + 1);
-                newBeer.Name = cleanName;
-
-            }
-            else newBeer.Name = beer.Namn + ", " + beer.Namn2;
-
-            await dbContext.AddAsync(newBeer);
-            await dbContext.SaveChangesAsync();
-
-            await Clients.All.SendAsync("GetBeer", newBeer.Name, newBeer.Producer, newBeer.Country, newBeer.Price, sysnum, newBeer.Alchohol, beer.ID);
+            await Clients.Caller.SendAsync("GetBeer", newBeer.Name, newBeer.Producer, newBeer.Country, newBeer.Price, sysnum, newBeer.Alchohol, newBeer.ID);
         }
     }
 }

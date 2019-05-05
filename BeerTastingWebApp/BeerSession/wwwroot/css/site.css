@@ -1,21 +1,10 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+﻿
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #333;
+  font-family: sans-serif;
 }
 
 .border-top {
@@ -36,15 +25,7 @@ accept-policy {
 
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 .footer {
   position: absolute;
   bottom: 0;
@@ -66,12 +47,10 @@ body {
     text-align: center;
 }
 
-
 .autocomplete {
     position: relative;
     display: inline-block;
 }
-
 
 .autocomplete-items {
     position: absolute;
@@ -101,4 +80,84 @@ body {
 .autocomplete-active {
     background-color: DodgerBlue !important;
     color: #ffffff;
+}
+
+.content-layout{
+    display: flex;
+    align-items: center;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.buttons{
+  display:flex;
+  flex-direction: column;
+  margin-right:auto;
+  margin-inline-start: 10em;
+}
+
+.header-text{
+  text-align: center;
+}
+
+button{
+  border-radius: 5px;
+  border: none;
+  margin-block-end: 2em;
+  background-color: rgb(7, 158, 27);
+  padding: 1em 2em;
+  outline: none;
+  color: #fff;
+}
+
+
+.alert {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+button.close {
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+#head-logo{
+  width: 50px;
+}
+
+.main-header{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  background-color: rgb(206, 206, 206);
+  padding: 1em 2em;
+}
+
+.main-header a{
+  text-decoration: none;
+  color: #333;
+}
+
+.main-navigation ul{
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+
+#first-links{
+  margin-right: auto;
+}
+
+.main-navigation{
+  display: flex;
+  
 }

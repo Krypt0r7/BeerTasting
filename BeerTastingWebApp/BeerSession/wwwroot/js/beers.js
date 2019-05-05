@@ -62,7 +62,8 @@ connection.start().then(function () {
 
 function removeTheBeer(link) {
     var id = link.id;
-    connection.invoke("RemoveSelectedBeer", id).catch(function (err) {
+    var tastingId = document.getElementById("tastingId").value;
+    connection.invoke("RemoveSelectedBeer", id, tastingId).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
@@ -96,8 +97,8 @@ document.getElementById("getBeersFromProd").addEventListener("click", function (
 
 document.getElementById("beerChooseButton").addEventListener("click", function (event) {
     var inputValue = document.getElementById("inputGroupSelect01").value;
-
-    connection.invoke("GetBeerInfo", inputValue).catch(function (err) {
+    var tastingId = document.getElementById("tastingId").value;
+    connection.invoke("GetBeerInfo", inputValue, tastingId).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
