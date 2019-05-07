@@ -46,6 +46,10 @@ namespace BeerSession
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.Configure<IdentityOptions>(option => {
+                option.Password.RequiredUniqueChars = 0;
+                option.Password.RequireNonAlphanumeric = false;
+            });
 
             services.AddSignalR();
 
