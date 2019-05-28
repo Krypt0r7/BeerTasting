@@ -5,12 +5,16 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/tastinghub").build
 document.getElementById("beerbutton").disabled = true;
 
 connection.on("removeBeer", function (id) {
-    document.getElementById(id).remove();
+    let cards = Array.from(document.querySelectorAll(".card"));
+    let selectedCard = cards.filter(x => x.dataset.cardid == id);
+    document.querySelector("#beer-list").removeChild(selectedCard[0]);
+    // document.getElementById(id).remove();
 });
 
 connection.on("populateProducers", function (producers) {
-    var array = JSON.parse(producers);
-    autocomplete(document.getElementById("prodInput"), array);
+    const array = JSON.parse(producers);
+    const producerDatalist = document.getElementById("producers");
+    populateProducerList(producerDatalist, array);
 });
 
 connection.on("populateBeers", function (beers) {
@@ -23,35 +27,40 @@ connection.on("populateWithBeer", function (beer) {
     populateInputFields(array);
 });
 
-connection.on("GetBeer", function (name, producer, country, price, sysnum, alcohol, id) {
+connection.on("getBeer", function (name, producer, country, price, sysnum, alcohol, id, image) {
 
-    var wrapper = document.createElement("div");
-    wrapper.id = name;
-    wrapper.className = "card participant-card";
-    var cardBody = document.createElement("div");
-    cardBody.className = "card-body";
-    wrapper.appendChild(cardBody)
-    var nameHead = document.createElement("h5");
-    nameHead.className = "card-title";
+    let wrapper = document.createElement("div");
+    wrapper.className = "card";
+    wrapper.dataset.cardid = id;
+    let theImage = document.createElement("img");
+    if (image != null) {
+        theImage.src = image;
+    }
+    wrapper.appendChild(theImage);
+    let nameHead = document.createElement("h4");
     nameHead.id = "beer-name";
     nameHead.textContent = name;
-    cardBody.appendChild(nameHead);
-    var subhead = document.createElement("p");
+    wrapper.appendChild(nameHead);
+    let subhead = document.createElement("p");
     subhead.innerHTML = producer + " - " + country;
-    cardBody.appendChild(subhead);
-    var priceAlco = document.createElement("p");
+    wrapper.appendChild(subhead);
+    let priceAlco = document.createElement("p");
     priceAlco.innerHTML = price + " kr | " + alcohol + "%";
-    cardBody.appendChild(priceAlco);
-    var link = document.createElement("input");
-    link.className = "btn btn-default";
+    wrapper.appendChild(priceAlco);
+    let link = document.createElement("input");
+    link.classList = "button-primary card-button";
     link.setAttribute("type", "button");
     link.setAttribute("value", "Remove beer");
     link.id = id;
-    cardBody.appendChild(link);
-    document.getElementById("beersList").appendChild(wrapper);
+    wrapper.appendChild(link);
+    document.getElementById("beer-list").appendChild(wrapper);
     link.onclick = function () {
         removeTheBeer(link)
     }
+
+    document.querySelector("#beer-input").value = "";
+    document.querySelector("#producer-input").value = "";
+    document.querySelector("#systemet-modal").style.display = "none";    
 });
 
 connection.start().then(function () {
@@ -80,14 +89,18 @@ document.getElementById("beerbutton").addEventListener("click", function (event)
 })
 
 document.getElementById("systemet-button").addEventListener("click", function (event) {
-    connection.invoke("GetMeSomeProducers").catch(function (err) {
-        return console.error(err.toString());
-    });
-    event.preventDefault;
+    const producerDatalist = document.querySelector("#producers");
+    if (producerDatalist.childNodes.length == 0) {
+        connection.invoke("GetMeSomeProducers").catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    }
+    showModal();
 });
 
-document.getElementById("getBeersFromProd").addEventListener("click", function (event) {
-    var prodName = document.getElementById("prodInput").value;
+document.getElementById("producer-button").addEventListener("click", function (event) {
+    var prodName = document.querySelector("#producer-input").value;
     connection.invoke("GetALlBeersFromProducer", prodName).catch(function (err) {
         return console.error(err.toString());
     });
@@ -95,10 +108,11 @@ document.getElementById("getBeersFromProd").addEventListener("click", function (
 });
 
 
-document.getElementById("beerChooseButton").addEventListener("click", function (event) {
-    var inputValue = document.getElementById("inputGroupSelect01").value;
-    var tastingId = document.getElementById("tastingId").value;
-    connection.invoke("GetBeerInfo", inputValue, tastingId).catch(function (err) {
+document.querySelector("#beer-chooser-button").addEventListener("click", function (event) {
+    let inputValue = document.getElementById("beer-input").value.split(',');
+    let tastingId = document.getElementById("tastingId").value;
+    let beerId = inputValue[0];
+    connection.invoke("GetBeerInfo", beerId, tastingId).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();

@@ -75,7 +75,7 @@ namespace BeerSession.Hubs
         {
             using(var client = new HttpClient())
             {
-                string response = await client.GetStringAsync("http://localhost:5000/api/systemet/producers/");
+                string response = await client.GetStringAsync("http://localhost:5050/api/systemet/producers/");
 
                 await Clients.Caller.SendAsync("populateProducers", response);
             }
@@ -85,23 +85,22 @@ namespace BeerSession.Hubs
         {
             using (var client = new HttpClient())
             {
-                string response = await client.GetStringAsync($"http://localhost:5000/api/systemet/producers/{producer}/");
+                string response = await client.GetStringAsync($"http://localhost:5050/api/systemet/producers/{producer}/");
 
                 await Clients.Caller.SendAsync("populateBeers", response);
             }
         }
 
-        public async Task GetBeerInfo(string name, string tastingId)
+        public async Task GetBeerInfo(string beerId, string tastingId)
         {
-            string[] split = name.Split(',').Select(s => s.Trim()).ToArray();
             string response = "";
             using (var client = new HttpClient())
             {
-                response = await client.GetStringAsync($"http://localhost:5000/api/systemet/beer/{split[0]}");
+                response = await client.GetStringAsync($"http://localhost:5050/api/systemet/beer/{beerId}");
             }
             var newBeer = await beerGetter.GetBeerAsync(response, tastingId);
 
-            await Clients.Caller.SendAsync("GetBeer", newBeer.Name, newBeer.Producer, newBeer.Country, newBeer.Price, newBeer.SystemetNumber, newBeer.Alchohol, newBeer.ID);
+            await Clients.Caller.SendAsync("getBeer", newBeer.Name, newBeer.Producer, newBeer.Country, newBeer.Price, newBeer.SystemetNumber, newBeer.Alchohol, newBeer.ID, newBeer.Image);
         }
 
         public async Task NewBeer(int sysnum,string tastingId)
@@ -110,7 +109,7 @@ namespace BeerSession.Hubs
             string response;
             using (var client = new HttpClient())
             {
-                response = await client.GetStringAsync($"http://localhost:5000/api/systemet/beer/{sysnum}");
+                response = await client.GetStringAsync($"http://localhost:5050/api/systemet/beer/{sysnum}");
             }
             var newBeer = await beerGetter.GetBeerAsync(response, tastingId);
 

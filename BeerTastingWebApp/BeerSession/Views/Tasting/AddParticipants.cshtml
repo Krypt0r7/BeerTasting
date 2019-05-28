@@ -4,7 +4,7 @@
     ViewData["Title"] = "AddParticipants";
 }
 
-<div class="row">
+<div class="content-container">
     <div class="col-4">
         <div class="basic-form">
             <h2>Add Participants</h2>
@@ -17,34 +17,19 @@
                 <input id="emailPart" type="email" class="form-control" />
             </div>
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
-            <input type="button" id="participantButton" class="btn btn-default" value="Add participant"/>
+            <input type="button" id="participantButton" class="button-primary" value="Add participant"/>
         </div>
         <div class="mt-4">
             <form asp-action="AddBeers" asp-controller="Tasting" method="post">
                 <input name="tastingId" type="hidden" value="@Model.TastingTag.ToString()" />
-                <input type="submit" value="I'm done, now add beers!" class="btn btn-default" />
+                <input type="submit" value="I'm done, now add beers!" class="button-primary" />
             </form>
         </div>
     </div>
-
-    <div class="col-8">
-        <div id="participantList">
-            <h2>Added participants</h2>
-            @if (Model.Participants != null)
-            {
-                @foreach (var item in Model.Participants)
-                {
-                    <div id="@item.Name" class="card participant-card">
-                        <div class="card-body">
-                            <h5 class="card-title" id="part-name">@item.Name</h5>
-                            <input id="email" type="hidden" value="@item.Email" />
-                            <input class="btn btn-default" onclick="removePart(this)" type="button" id="@item.Name" value="Remove participant" />
-                        </div>
-                    </div>
-                }
-            }
-        </div>
+    <div class="list-container">
+        <partial name="_participantPartial"></partial>
     </div>
+
 </div>
 
 

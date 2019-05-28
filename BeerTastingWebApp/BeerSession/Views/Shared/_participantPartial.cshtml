@@ -1,0 +1,18 @@
+@model BeerSession.Models.Tasting
+
+<h2 class="center">Added participants</h2>
+<div id="participantList" class="card-list">
+        @if (Model.Participants != null)
+        {
+            @foreach (var item in Model.Participants)
+            {
+                <div id="@item.Name" class="card participant-card">
+                    <div class="card-body">
+                        <h4 class="card-title" id="part-name">@item.Name</h4>
+                        <p id="email">@item.Email</p>
+                        <input class="button-primary card-button part-button" onclick="removePart(this)" type="button" id="@item.Name" value="Remove participant" />
+                    </div>
+                </div>
+            }
+        }
+</div>

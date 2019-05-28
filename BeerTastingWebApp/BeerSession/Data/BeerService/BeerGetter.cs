@@ -28,8 +28,10 @@ namespace BeerSession.Data.BeerService
                 Price = beer.PrisInkMoms,
                 SystemetNumber = beer.ArtikelId,
                 Alchohol = beer.Alkoholhalt,
-                Tasting = tastingObject
+                Tasting = tastingObject,
+                Image = beer.ImageUrl
             };
+
 
             if (beer.Producent.ToLower().Contains(beer.Namn.ToLower())) newBeer.Name = beer.Namn2;
             else if (beer.Producent.ToLower() == beer.Namn2.ToLower()) newBeer.Name = beer.Namn;

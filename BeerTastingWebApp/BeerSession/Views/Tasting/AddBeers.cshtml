@@ -5,12 +5,11 @@
 }
 
 
-<div class="row">
-    <div class="col-4">
-
+<div class="content-container">
+    <div class="beer-form">
         <div class="basic-form">
             <h2>Add beers</h2>
-            <button type="button" class="btn btn-primary" id="systemet-button" data-toggle="modal" data-target=".bd-example-modal-lg">Add from systemet</button>
+            <button type="button" class="btn button-primary" id="systemet-button" >Add from systemet</button>
             <div class="form-group">
                 <label>Name</label>
                 <input id="beerName" class="form-control" />
@@ -36,62 +35,25 @@
                 <input id="sysNumb" class="form-control" />
             </div>
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
-            <input type="button" id="beerbutton" class="btn btn-default" value="Add beer" />
+            <input type="button" id="beerbutton" class="button-primary" value="Add beer" />
         </div>
 
-
-        <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content" style="padding: 30px">
-                    <label>Type to get producer</label>
-                    <div class="input-group mb-4">
-                        <input type="text" class="form-control autocomplete" id="prodInput" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" id="getBeersFromProd">Choose producer</button>
-                        </div>
-                    </div>
-                    <div class="input-group mb-4">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Beers</label>
-                        </div>
-                        <select class="custom-select" id="inputGroupSelect01"></select>
-                    </div>
-                    <div class="input-group mb-4">
-                        <button class="btn btn-outline-secondary" id="beerChooseButton">Choose beer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-4 nav-buttons">
-            <input onclick="goBack()" value="Go back" type="button" class="btn btn-outline-secondary"  />
+        
+        <div class="nav-buttons">
+            <input onclick="goBack()" value="Go back" type="button" class="button-primary"  />
             <form asp-action="Session">
                 <input type="hidden" name="tastingId" value="@Model.TastingTag" />
-                <input id="nextStep" type="submit" value="I'm done. Let's GO!" class="btn btn-default" />
+                <input id="nextStep" type="submit" value="I'm done. Let's GO!" class="button-primary" />
             </form>
         </div>
     </div>
+    <div class="list-container">
+        <partial name="_beersPartial"></partial>
 
-    <div class="col-8">
-        <div id="beersList">
-            <h2>Added beers</h2>
-            @if (Model.Beers != null)
-            {
-                @foreach (var item in Model.Beers)
-                {
-                    <div id="@item.ID" class="card participant-card">
-                        <div class="card-body">
-                        <h5 class="card-title" id="beer-name">@item.Name</h5>
-                        <p>@item.Producer - @item.Country</p>
-                        <p>@item.Price kr | @item.Alchohol%</p>
-                        <input class="btn btn-default" type="button" value="Remove beer" onclick="removeTheBeer(this)" id="@item.ID"></div>
-                    </div>
-                }
-            }
-        </div>
     </div>
 </div>
 
-<script src="~/js/autocomplete.js" type="text/javascript"></script>
+<partial name="_addFromSystemetPartial"></partial>
+
 <script src="~/lib/@@aspnet/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/beers.js"></script>

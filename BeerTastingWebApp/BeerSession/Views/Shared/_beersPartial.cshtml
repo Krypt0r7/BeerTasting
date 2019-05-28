@@ -1,0 +1,18 @@
+@model BeerSession.Models.Tasting
+
+<h2 class="center">Added beers</h2>
+<div id="beer-list" class="card-list">
+        @if (Model.Beers != null)
+        {
+            @foreach (var item in Model.Beers)
+            {
+                <div data-cardId="@item.ID" class="card">
+                    <img src="@item.Image" />
+                    <h4 class="" id="beer-name">@item.Name</h4>
+                    <p>@item.Producer - @item.Country</p>
+                    <p>@item.Price kr | @item.Alchohol%</p>
+                    <input class="button-primary card-button beer-button" type="button" value="Remove beer" id="@item.ID" onclick="removeTheBeer(this)" >
+                </div>
+            }
+        }   
+</div>

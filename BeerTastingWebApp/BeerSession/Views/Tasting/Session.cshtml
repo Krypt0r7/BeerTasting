@@ -1,42 +1,32 @@
-﻿@model  BeerSession.Models.Tasting
+﻿
+@model  BeerSession.Models.Tasting
 @{
     ViewData["Title"] = "Session";
 }
-<div class="layout">
-    <h1 class="header-text">Grand total</h1>
-    <div class="content-layout">
+<div class="content-container column center">
+    <div class="content">
+        <h1 class="header-text">Grand total</h1>
         <div class="buttons">
-            <button type="submit" name="addMoreParticipantButton">Add more participants</button>
-            <button type="submit" name="addMoreBeersButton">Add more beers</button>
+            <form method="post" asp-action="AddBeers" asp-controller="Tasting">
+                <input type="hidden" name="tastingId" value="@Model.TastingTag" />
+                <Button type="submit" class="button-primary no-margin">Manage beers</Button>
+            </form>
+    
+            <form method="post" asp-action="GetTasting" asp-controller="Tasting">
+                <input type="hidden" name="tastingId" value="@Model.TastingTag" />
+                <button type="submit" class="button-primary no-margin">Manage participants</button>
+            </form>
+            <form>
+                <input type="hidden" value="@Model.TastingTag" id="tastingId">
+                <button class="button-primary" type="submit">Start the session</button>
+            </form>
         </div>
         <div class="content">
-            <h2>Participants</h2>
-            <div id="participantsInSession">
-                @foreach (var item in @Model.Participants)
-                {
-                    <div id="@item.Name" class="card participant-card">
-                        <div class="card-body">
-                            <h5 class="card-title" id="part-name">@item.Name</h5>
-                            <p>@item.Email</p>
-                            <input id="email" type="hidden" value="@item.Email" />
-                        </div>
-                    </div>
-                }
-            </div>
-            <h2>Beers</h2>
-            <div id="beersInSession">
-                @foreach (var item in @Model.Beers)
-                {
-                    <div id="@item.ID" class="card participant-card">
-                        <div class="card-body">
-                            <h5 class="card-title" id="beer-name">@item.Name</h5>
-                            <p>@item.Producer - @item.Country</p>
-                            <p>@item.Price kr | @item.Alchohol%</p>
-                        </div>
-                    </div>
-                }
-            </div>
+            <partial name="_participantPartial"></partial>
+            <partial name="_beersPartial"></partial>
         </div>
     </div>
-    <button type="submit">Start the session</button>
 </div>
+
+<script src="~/js/session.js"></script>
+

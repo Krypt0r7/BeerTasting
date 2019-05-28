@@ -16,7 +16,7 @@ namespace BeerSession.Models
         public decimal Price { get; set; }
         public decimal Alchohol { get; set; }
         public int SystemetNumber { get; set; }
+        public string Image { get; set; }
         public Tasting Tasting { get; set; }
-
     }
 }

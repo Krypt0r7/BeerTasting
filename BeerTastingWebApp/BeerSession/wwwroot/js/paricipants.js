@@ -23,13 +23,12 @@ connection.on("GetParticipant", function (name, email) {
     nameHead.id = "part-name";
     nameHead.textContent = newName;
     cardBody.appendChild(nameHead);
-    var emailHidden = document.createElement("input");
-    emailHidden.id = "email";
-    emailHidden.setAttribute("type", "hidden");
-    emailHidden.setAttribute("value", newEmail);
-    cardBody.appendChild(emailHidden);
+    var emailPart = document.createElement("p");
+    emailPart.id = "email";
+    emailPart.textContent = newEmail;
+    cardBody.appendChild(newEmail);
     var link = document.createElement("input");
-    link.className = "btn btn-default";
+    link.className = "button-primary";
     link.setAttribute("type", "button");
     link.id = name;
     link.setAttribute("value", "Remove participant");

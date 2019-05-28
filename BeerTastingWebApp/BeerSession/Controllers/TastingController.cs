@@ -38,12 +38,7 @@ namespace BeerSession.Controllers
 
             var userDb = await tastingService.GetUserAsync(user);
             
-            if (userDb.Tastings.Count > 0)
-            {
-                return View();
-            }
-
-            return RedirectToAction("NewTasting");
+            return View(userDb);
         }
 
 
@@ -80,19 +75,19 @@ namespace BeerSession.Controllers
             return RedirectToAction("AddParticipants", tasting);
         }
 
-        public async Task<IActionResult> RemoveTasting(string tastingId)
+        public async Task<IActionResult> RemoveTastin (string tastingId)
         {
             await tastingService.RemoveTasting(tastingId);
-            return RedirectToAction("MyTasting");
+            return Redirect("Index");
         }
 
-        public async Task<IActionResult> Session(Guid tastingId)
+        public IActionResult Session(Guid tastingId)
         {
             var tasting = dbContext.Tasting.Where(t => t.TastingTag == tastingId).Include(i => i.Participants).Include(i => i.Beers).First();
             return View(tasting);
         }
 
-        public async Task<IActionResult> CatchParticipant(string tastingId)
+        public ActionResult CatchParticipant(string tastingId)
         {
             var tasting = dbContext.Tasting.FirstOrDefault(f => f.TastingTag.ToString() == tastingId);
 

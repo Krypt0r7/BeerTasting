@@ -4,15 +4,22 @@
 // Write your JavaScript code.
 
 function listTheBeers(array) {
-    var listOfBeer = document.getElementById("inputGroupSelect01");
-    clearListofBeers(listOfBeer);
+    var listOfBeer = document.querySelector("#beer-listing");
+    listOfBeer.innerHTML = "";
+    document.querySelector("#beer-chooser").classList.remove("no-show");
 
-    for (var i = 0; i < array.length; i++) {
-        var option = document.createElement("option");
-        option.value = array[i];
-        option.innerHTML = array[i];
-        listOfBeer.appendChild(option);
-    }
+    array.forEach(x => {
+        let option = document.createElement("option");
+        option.value = x;
+        listOfBeer.appendChild(option)
+    });
+
+
+    // for (var i = 0; i < array.length; i++) {
+    //     var option = document.createElement("option");
+    //     option.value = array[i];
+    //     listOfBeer.appendChild(option);
+    // }
 }
 
 function clearListofBeers(list) {
@@ -28,11 +35,38 @@ function populateInputFields(array) {
     document.getElementById("alcohol").value = array.alkoholhalt;
 }
 
-$("#myModal").on('hidden.bs.modal', function () {
-    clearListofBeers(document.getElementById("inputGroupSelect01"));
-    document.getElementById("prodInput").value = "";
-})
+// $("#myModal").on('hidden.bs.modal', function () {
+//     clearListofBeers(document.getElementById("inputGroupSelect01"));
+//     document.getElementById("prodInput").value = "";
+// })
 
 function goBack() {
     window.history.back();
+}
+
+function populateProducerList(dataList, array){
+    array.forEach(x => {
+        let option = document.createElement("option");
+        option.textContent = x;
+        dataList.appendChild(option);
+    });
+
+}
+
+
+function showModal(){
+    let modal = document.querySelector("#systemet-modal");
+    let span = document.querySelector(".close");
+    modal.style.display = "block";
+    document.querySelector("#producer-input").focus();
+
+    window.onclick = event =>{
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    span.onclick = () =>{
+        modal.style.display = "none";
+    }
 }

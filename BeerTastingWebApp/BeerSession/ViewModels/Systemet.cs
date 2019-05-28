@@ -28,5 +28,6 @@ namespace BeerSession.ViewModels
         public string Leverantör { get; set; }
         public decimal Alkoholhalt { get; set; }
         public string RavarorDesc { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

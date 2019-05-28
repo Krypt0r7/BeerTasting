@@ -1,9 +1,51 @@
-﻿@model BeerSession.Models.Tasting
+﻿@model BeerSession.Models.User
 
 @{
     ViewData["Title"] = "Tasting";
 }
 
-<a class="btn" href="mytasting">See my sessions</a>
-<a class="btn" href="NewTasting">Create new session</a>
 
+<div class="content-container column center">
+    <table class="table table-striped sessions-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Enter</th>
+                <th>Remove</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model.Tastings.Count > 0)
+            {
+                @foreach (var item in Model.Tastings)
+                {
+                <tr>
+                    <td>@item.Tasting.ID</td>
+                    <td>@item.Tasting.Name</td>
+                    <td>
+                        <form method="post" asp-action="session" asp-controller="Tasting">
+                            <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                            <Button type="submit" class="button-primary no-margin">Show session</Button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="RemoveTasting" asp-controller="Tasting">
+                            <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                            <button type="submit" class="button-primary no-margin">Remove session</button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            }
+            else
+            {
+                <p>No sessions</p>
+            }
+        </tbody>
+    </table>
+    <p>or</p>
+    <a class="btn" asp-action="newtasting">Create new session</a>
+</div>

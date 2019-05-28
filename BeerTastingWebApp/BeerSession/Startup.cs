@@ -53,11 +53,16 @@ namespace BeerSession
 
             services.AddSignalR();
 
+            services.AddRouting(option => option.LowercaseUrls = true);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
             services.AddTransient<IBeerGetter, BeerGetter>();
             services.AddTransient<ITastingService, TastingService>();
             services.AddTransient<IParticipantTools, ParticipantTools>();
+           
             services.AddDistributedMemoryCache();
+            
             services.AddSession(option =>
             {
                 option.IdleTimeout = TimeSpan.FromSeconds(10);

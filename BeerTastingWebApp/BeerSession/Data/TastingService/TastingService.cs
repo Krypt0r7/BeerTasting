@@ -40,7 +40,12 @@ namespace BeerSession.Data.TastingService
 
         public async Task RemoveTasting(string tastingId)
         {
-            var tasting = dbContext.Tasting.Include(i => i.Participants).First(f => f.TastingTag.ToString() == tastingId);
+            var tasting = dbContext.Tasting.Include(i => i.Participants).Include(t => t.Beers).First(f => f.TastingTag.ToString() == tastingId);
+            foreach (var item in tasting.Beers)
+            {
+                dbContext.Remove(item);
+            }
+            
             foreach (var item in tasting.Participants)
             {
                 dbContext.Remove(item);
@@ -51,7 +56,7 @@ namespace BeerSession.Data.TastingService
 
         public async Task<User> GetUserAsync(IdentityUser user)
         {
-            var userDb = dbContext.User.Include(i => i.Tastings).FirstOrDefault(f => f.UserIdentity == user.Id);
+            var userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
             if (userDb == null)
             {
                 var newUser = new User
@@ -64,6 +69,8 @@ namespace BeerSession.Data.TastingService
 
                 dbContext.Add(newUser);
                 await dbContext.SaveChangesAsync();
+
+                userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
             }
 
             return userDb;
