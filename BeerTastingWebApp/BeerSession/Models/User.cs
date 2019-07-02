@@ -17,5 +17,6 @@ namespace BeerSession.Models
         public string Email { get; set; }
         public DateTime SignedUp { get; private set; }
         public IList<UserTasting> Tastings { get; set; }
+        public IList<User> MeisterTastings { get; set; }
     }
 }

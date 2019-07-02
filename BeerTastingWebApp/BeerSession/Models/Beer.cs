@@ -18,5 +18,6 @@ namespace BeerSession.Models
         public int SystemetNumber { get; set; }
         public string Image { get; set; }
         public Tasting Tasting { get; set; }
+        public ICollection<Review> Reviews { get; set; }
     }
 }

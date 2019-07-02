@@ -4,14 +4,16 @@ using BeerSession.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BeerSession.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190611095831_Review")]
+    partial class Review
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,15 +141,11 @@ namespace BeerSession.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getutcdate()");
 
-                    b.Property<int?>("UserID");
-
                     b.Property<string>("UserIdentity");
 
                     b.Property<string>("UserName");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("User");
                 });
@@ -360,13 +358,6 @@ namespace BeerSession.Migrations
                     b.HasOne("BeerSession.Models.User", "SessionMeister")
                         .WithMany()
                         .HasForeignKey("SessionMeisterID");
-                });
-
-            modelBuilder.Entity("BeerSession.Models.User", b =>
-                {
-                    b.HasOne("BeerSession.Models.User")
-                        .WithMany("MeisterTastings")
-                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>

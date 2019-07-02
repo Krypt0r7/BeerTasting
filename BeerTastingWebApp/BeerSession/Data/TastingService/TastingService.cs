@@ -27,12 +27,7 @@ namespace BeerSession.Data.TastingService
             tasting.TastingTag = Guid.NewGuid();
             tasting.SessionMeister = userDB;
 
-            var newUserTaste = new UserTasting
-            {
-                Tasting = tasting,
-                User = userDB
-            };
-            await dbContext.AddAsync(newUserTaste);
+          
             await dbContext.SaveChangesAsync();
 
             return tasting;
@@ -56,7 +51,7 @@ namespace BeerSession.Data.TastingService
 
         public async Task<User> GetUserAsync(IdentityUser user)
         {
-            var userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
+            var userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).Include(i => i.MeisterTastings).First(f => f.UserIdentity == user.Id);
             if (userDb == null)
             {
                 var newUser = new User
@@ -70,7 +65,7 @@ namespace BeerSession.Data.TastingService
                 dbContext.Add(newUser);
                 await dbContext.SaveChangesAsync();
 
-                userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
+                userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).Include(i => i.MeisterTastings).First(f => f.UserIdentity == user.Id);
             }
 
             return userDb;

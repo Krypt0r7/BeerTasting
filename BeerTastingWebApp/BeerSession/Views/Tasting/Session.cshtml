@@ -16,8 +16,8 @@
                 <input type="hidden" name="tastingId" value="@Model.TastingTag" />
                 <button type="submit" class="button-primary no-margin">Manage participants</button>
             </form>
-            <form>
-                <input type="hidden" value="@Model.TastingTag" id="tastingId">
+            <form method="post" asp-action="Start" asp-controller="Tasting">
+                <input type="hidden" value="@Model.TastingTag" id="tastingId" name="tastingTag">
                 <button class="button-primary" type="submit">Start the session</button>
             </form>
         </div>

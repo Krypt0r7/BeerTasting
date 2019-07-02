@@ -36,6 +36,30 @@ hr{
   margin-block-start: .5em;
 }
 
+.cookie-consent, .cookie-consent a{
+  color: #fff;
+}
+
+.cookie-consent a{
+  margin-inline-start: .5em;
+}
+
+.cookie-consent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(148, 148, 148);
+  padding: .5em;
+}
+
+.cookie-consent button{
+  color: #333;
+  background-color: #ddd;
+  border: none;
+  padding: .3em;
+  margin-inline-start: 1em;
+}
+
 .content-container{
   display: flex;
   width: 100%;
@@ -141,11 +165,6 @@ hr{
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
 .card-list{
   display: flex;
   flex-wrap: wrap;
@@ -235,7 +254,7 @@ hr{
   margin-right: auto;
   margin-left: auto;
   justify-content: space-between;
-  width: 50%;
+  width: 70%;
 }
 
 .header-text{

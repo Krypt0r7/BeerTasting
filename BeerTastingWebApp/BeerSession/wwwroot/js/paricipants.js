@@ -18,7 +18,7 @@ connection.on("GetParticipant", function (name, email) {
     var cardBody = document.createElement("div");
     cardBody.className = "card-body";
     wrapper.appendChild(cardBody)
-    var nameHead = document.createElement("h5");
+    var nameHead = document.createElement("h4");
     nameHead.className = "card-title";
     nameHead.id = "part-name";
     nameHead.textContent = newName;
@@ -26,7 +26,7 @@ connection.on("GetParticipant", function (name, email) {
     var emailPart = document.createElement("p");
     emailPart.id = "email";
     emailPart.textContent = newEmail;
-    cardBody.appendChild(newEmail);
+    cardBody.appendChild(emailPart);
     var link = document.createElement("input");
     link.className = "button-primary";
     link.setAttribute("type", "button");

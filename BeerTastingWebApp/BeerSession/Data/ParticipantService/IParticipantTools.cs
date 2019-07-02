@@ -7,6 +7,6 @@ namespace BeerSession.Data.ParticipantService
     {
         Task GetParticipantAsync(string tastingId, string email, string name);
         Task RemoveParticipant(string tastingId, string name);
-        Task SendMailToParticipant(Participant participant);
+        Task SendMailToParticipant(Participant participant, string tastingId);
     }
 }

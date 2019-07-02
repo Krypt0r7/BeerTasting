@@ -15,7 +15,7 @@ namespace BeerSession.Models
         public DateTime? DateCreated { get; private set; }
         public Guid TastingTag { get; set; }
         public ICollection<Participant> Participants { get; set; }
-        public ICollection<UserTasting> Users { get; set; }
+        public List<UserTasting> Users { get; set; }
         public ICollection<Beer> Beers { get; set; }
         public User SessionMeister { get; set; }
     }

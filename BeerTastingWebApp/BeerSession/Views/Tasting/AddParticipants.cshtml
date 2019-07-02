@@ -19,6 +19,18 @@
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
             <input type="button" id="participantButton" class="button-primary" value="Add participant"/>
         </div>
+        <div>
+            <input list="user-list" type="text">
+            <datalist id="user-list">
+                @if (@Model.Users[0].User != null)
+                {
+                    @foreach (var item in Model.Users)
+                    {
+                        <option>@item.User.Email</option>
+                    }
+                }
+            </datalist>
+        </div>
         <div class="mt-4">
             <form asp-action="AddBeers" asp-controller="Tasting" method="post">
                 <input name="tastingId" type="hidden" value="@Model.TastingTag.ToString()" />

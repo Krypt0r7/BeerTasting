@@ -45,7 +45,7 @@ namespace BeerSession.Controllers
         public async Task<IActionResult> MyTasting()
         {
             var user = await userManager.GetUserAsync(HttpContext.User);
-            var dbUser = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).First(f => f.UserIdentity == user.Id);
+            var dbUser = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).AsNoTracking().First(f => f.UserIdentity == user.Id);
 
             return View(dbUser);
         }
@@ -58,24 +58,25 @@ namespace BeerSession.Controllers
 
         public IActionResult AddBeers(string tastingId)
         {
-            var tasting = dbContext.Tasting.Include(v => v.Beers).First(x => x.TastingTag.ToString() == tastingId);
+            var tasting = dbContext.Tasting.Include(v => v.Beers).AsNoTracking().First(x => x.TastingTag.ToString() == tastingId);
 
             return View(tasting);
+
         }
 
         public IActionResult AddParticipants(Tasting tasting)
         {
-            var taste = dbContext.Tasting.Include(g => g.Participants).First(f => f.TastingTag == tasting.TastingTag);
+            var taste = dbContext.Tasting.Include(g => g.Participants).Include(i => i.Users).ThenInclude(t => t.User).AsNoTracking().First(f => f.TastingTag == tasting.TastingTag);
             return View(taste);
         }
 
         public IActionResult GetTasting(string tastingId)
         {
-            var tasting = dbContext.Tasting.First(f => f.TastingTag.ToString() == tastingId);
+            var tasting = dbContext.Tasting.AsNoTracking().First(f => f.TastingTag.ToString() == tastingId);
             return RedirectToAction("AddParticipants", tasting);
         }
 
-        public async Task<IActionResult> RemoveTastin (string tastingId)
+        public async Task<IActionResult> RemoveTasting (string tastingId)
         {
             await tastingService.RemoveTasting(tastingId);
             return Redirect("Index");
@@ -83,15 +84,21 @@ namespace BeerSession.Controllers
 
         public IActionResult Session(Guid tastingId)
         {
-            var tasting = dbContext.Tasting.Where(t => t.TastingTag == tastingId).Include(i => i.Participants).Include(i => i.Beers).First();
+            var tasting = dbContext.Tasting.Where(t => t.TastingTag == tastingId).Include(i => i.Participants).Include(i => i.Beers).AsNoTracking().First();
             return View(tasting);
         }
 
         public ActionResult CatchParticipant(string tastingId)
         {
-            var tasting = dbContext.Tasting.FirstOrDefault(f => f.TastingTag.ToString() == tastingId);
+            var tasting = dbContext.Tasting.AsNoTracking().FirstOrDefault(f => f.TastingTag.ToString() == tastingId);
 
             return RedirectToAction("Session", tasting);
+        }
+        [HttpPost]
+        public ActionResult Start(Guid tastingTag)
+        {
+            var tasting = dbContext.Tasting.Where(f => f.TastingTag == tastingTag).Include(i => i.Beers).ThenInclude(t => t.Reviews).Include(j => j.Users).ThenInclude(t => t.User).AsNoTracking().First();
+            return View(tasting);
         }
 
         [HttpPost]

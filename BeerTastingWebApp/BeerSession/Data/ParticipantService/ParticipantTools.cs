@@ -31,7 +31,7 @@ namespace BeerSession.Data.ParticipantService
 
             dbContext.Add(newPart);
             await dbContext.SaveChangesAsync();
-            SendMailToParticipant(newPart);
+            SendMailToParticipant(newPart, tastingId);
         }
 
         public async Task RemoveParticipant(string tastingId, string name)
@@ -44,23 +44,24 @@ namespace BeerSession.Data.ParticipantService
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task SendMailToParticipant(Participant participant)
+        public async Task SendMailToParticipant(Participant participant, string tastingId)
         {
-            var participantDb = dbContext.Participant.Where(f => f == participant).Include(i => i.Tasting).ThenInclude(t => t.SessionMeister).FirstOrDefault();
             var apiKey = configuration.GetValue<string>("APIKeys:SendGridKey");
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("noreply@beersessions.com", "BeerSession Meister");
             var subject = "Trying to send a email to a partisipant";
-            var to = new EmailAddress(participantDb.Email, participantDb.Name);
+            var to = new EmailAddress(participant.Email, participant.Name);
             var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = $"<a href='https://localhost:44349/tasting/catchparticipant?tastingId={participantDb.Tasting.TastingTag.ToString()}'>Join the session</a>";
+            var htmlContent = $"<a href='https://localhost:44349/tasting/catchparticipant?tastingId={tastingId}'>Join the session</a>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
             if (response.StatusCode == System.Net.HttpStatusCode.Accepted)
             {
-                participantDb.MailSent = true;
+                dbContext.Participant.First(w => w.Email == participant.Email).MailSent = true;
                 await dbContext.SaveChangesAsync();
             }
         }
+
+
     }
 }

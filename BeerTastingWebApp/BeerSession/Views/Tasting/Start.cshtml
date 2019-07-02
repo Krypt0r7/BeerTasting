@@ -4,6 +4,14 @@
     ViewData["Titlte"] = "Start the session";
 }
 
-<div>
-    
+<div class="content-container column center">
+    <div class="content-flow">
+        @foreach (var item in Model.Users)
+        {
+            
+        }
+    </div>
 </div>
+
+<script src="~/lib/@@aspnet/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/js/start.js"></script>
