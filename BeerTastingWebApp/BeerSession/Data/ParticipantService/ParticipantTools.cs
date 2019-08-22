@@ -31,7 +31,7 @@ namespace BeerSession.Data.ParticipantService
 
             dbContext.Add(newPart);
             await dbContext.SaveChangesAsync();
-            SendMailToParticipant(newPart, tastingId);
+            await SendMailToParticipant(newPart, tastingId);
         }
 
         public async Task RemoveParticipant(string tastingId, string name)
@@ -52,7 +52,7 @@ namespace BeerSession.Data.ParticipantService
             var subject = "Trying to send a email to a partisipant";
             var to = new EmailAddress(participant.Email, participant.Name);
             var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = $"<a href='https://localhost:44349/tasting/catchparticipant?tastingId={tastingId}'>Join the session</a>";
+            var htmlContent = $"<a href='https://localhost:5001/tasting/catchparticipant?tastingId={tastingId}'>Join the session</a>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
             if (response.StatusCode == System.Net.HttpStatusCode.Accepted)

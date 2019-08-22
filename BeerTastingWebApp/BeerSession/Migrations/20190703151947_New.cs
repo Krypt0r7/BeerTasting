@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BeerSession.Migrations
 {
-    public partial class Reintializing : Migration
+    public partial class New : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,19 +48,6 @@ namespace BeerSession.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TastingRoom",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoomName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TastingRoom", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -70,11 +57,18 @@ namespace BeerSession.Migrations
                     UserName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    SignedUp = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()")
+                    SignedUp = table.Column<DateTime>(nullable: false, defaultValueSql: "getutcdate()"),
+                    UserID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_User_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,26 +178,6 @@ namespace BeerSession.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Connection",
-                columns: table => new
-                {
-                    ConnectionID = table.Column<string>(nullable: false),
-                    UserAgent = table.Column<string>(nullable: true),
-                    Connected = table.Column<bool>(nullable: false),
-                    UserID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Connection", x => x.ConnectionID);
-                    table.ForeignKey(
-                        name: "FK_Connection_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tasting",
                 columns: table => new
                 {
@@ -213,7 +187,6 @@ namespace BeerSession.Migrations
                     Password = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: true, defaultValueSql: "getutcdate()"),
                     TastingTag = table.Column<Guid>(nullable: false),
-                    TastingRoomID = table.Column<int>(nullable: true),
                     SessionMeisterID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -225,36 +198,6 @@ namespace BeerSession.Migrations
                         principalTable: "User",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tasting_TastingRoom_TastingRoomID",
-                        column: x => x.TastingRoomID,
-                        principalTable: "TastingRoom",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserTastingRooms",
-                columns: table => new
-                {
-                    TastingRoomId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTastingRooms", x => new { x.UserId, x.TastingRoomId });
-                    table.ForeignKey(
-                        name: "FK_UserTastingRooms_TastingRoom_TastingRoomId",
-                        column: x => x.TastingRoomId,
-                        principalTable: "TastingRoom",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserTastingRooms_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -269,6 +212,7 @@ namespace BeerSession.Migrations
                     Price = table.Column<decimal>(nullable: false),
                     Alchohol = table.Column<decimal>(nullable: false),
                     SystemetNumber = table.Column<int>(nullable: false),
+                    Image = table.Column<string>(nullable: true),
                     TastingID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -290,6 +234,7 @@ namespace BeerSession.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
+                    MailSent = table.Column<bool>(nullable: false),
                     TastingID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -325,6 +270,38 @@ namespace BeerSession.Migrations
                         principalTable: "User",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Taste = table.Column<int>(nullable: false),
+                    Smell = table.Column<int>(nullable: false),
+                    Look = table.Column<int>(nullable: false),
+                    OverallRating = table.Column<int>(nullable: false),
+                    Score = table.Column<decimal>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    BeerID = table.Column<int>(nullable: true),
+                    UserID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Review_Beer_BeerID",
+                        column: x => x.BeerID,
+                        principalTable: "Beer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Review_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -372,14 +349,19 @@ namespace BeerSession.Migrations
                 column: "TastingID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Connection_UserID",
-                table: "Connection",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Participant_TastingID",
                 table: "Participant",
                 column: "TastingID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_BeerID",
+                table: "Review",
+                column: "BeerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_UserID",
+                table: "Review",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasting_SessionMeisterID",
@@ -387,19 +369,14 @@ namespace BeerSession.Migrations
                 column: "SessionMeisterID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasting_TastingRoomID",
-                table: "Tasting",
-                column: "TastingRoomID");
+                name: "IX_User_UserID",
+                table: "User",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserTasting_UserId",
                 table: "UserTasting",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserTastingRooms_TastingRoomId",
-                table: "UserTastingRooms",
-                column: "TastingRoomId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -420,19 +397,13 @@ namespace BeerSession.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Beer");
-
-            migrationBuilder.DropTable(
-                name: "Connection");
-
-            migrationBuilder.DropTable(
                 name: "Participant");
 
             migrationBuilder.DropTable(
-                name: "UserTasting");
+                name: "Review");
 
             migrationBuilder.DropTable(
-                name: "UserTastingRooms");
+                name: "UserTasting");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -441,13 +412,13 @@ namespace BeerSession.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Beer");
+
+            migrationBuilder.DropTable(
                 name: "Tasting");
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "TastingRoom");
         }
     }
 }

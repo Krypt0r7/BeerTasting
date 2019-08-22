@@ -1,10 +1,12 @@
 @model BeerSession.Models.Tasting
 
-<h2 class="center">Added participants</h2>
+<h2 class="center">Participants. Mail sent. Not joined</h2>
 <div id="participantList" class="card-list">
-        @if (Model.Participants != null)
+    @if (Model.Participants != null)
+    {
+        @foreach (var item in Model.Participants)
         {
-            @foreach (var item in Model.Participants)
+            if (!item.JoinedSession)
             {
                 <div id="@item.Name" class="card participant-card">
                     <div class="card-body">
@@ -15,4 +17,23 @@
                 </div>
             }
         }
+
+    }
+
+</div>
+<div class="card-list">
+    @if(Model.Users != null)
+    {
+        <h3 class="center">Joined Users</h3>
+        @foreach (var item in Model.Users)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">@item.User.Name</h4>
+                    <p></p>
+                    
+                </div>
+            </div>
+        }
+    }
 </div>

@@ -18,22 +18,22 @@
         </thead>
         <tbody>
 
-            @if (Model.Tastings.Count > 0)
+            @if (Model.MeisterTastings != null)
             {
-                @foreach (var item in Model.Tastings)
+                @foreach (var item in Model.MeisterTastings)
                 {
                 <tr>
-                    <td>@item.Tasting.ID</td>
-                    <td>@item.Tasting.Name</td>
+                    <td>@item.ID</td>
+                    <td>@item.Name</td>
                     <td>
                         <form method="post" asp-action="session" asp-controller="Tasting">
-                            <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                            <input type="hidden" name="tastingId" value="@item.TastingTag" />
                             <Button type="submit" class="button-primary no-margin">Show session</Button>
                         </form>
                     </td>
                     <td>
                         <form method="post" asp-action="RemoveTasting" asp-controller="Tasting">
-                            <input type="hidden" name="tastingId" value="@item.Tasting.TastingTag" />
+                            <input type="hidden" name="tastingId" value="@item.TastingTag" />
                             <button type="submit" class="button-primary no-margin">Remove session</button>
                         </form>
                     </td>

@@ -22,7 +22,7 @@
         <div>
             <input list="user-list" type="text">
             <datalist id="user-list">
-                @if (@Model.Users[0].User != null)
+                @if (@Model.Users.Count != 0)
                 {
                     @foreach (var item in Model.Users)
                     {

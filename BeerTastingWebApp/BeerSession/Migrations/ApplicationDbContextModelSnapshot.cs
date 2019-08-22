@@ -56,6 +56,8 @@ namespace BeerSession.Migrations
 
                     b.Property<string>("Email");
 
+                    b.Property<bool>("JoinedSession");
+
                     b.Property<bool>("MailSent");
 
                     b.Property<string>("Name");
@@ -139,15 +141,11 @@ namespace BeerSession.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getutcdate()");
 
-                    b.Property<int?>("UserID");
-
                     b.Property<string>("UserIdentity");
 
                     b.Property<string>("UserName");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("User");
                 });
@@ -358,15 +356,8 @@ namespace BeerSession.Migrations
             modelBuilder.Entity("BeerSession.Models.Tasting", b =>
                 {
                     b.HasOne("BeerSession.Models.User", "SessionMeister")
-                        .WithMany()
-                        .HasForeignKey("SessionMeisterID");
-                });
-
-            modelBuilder.Entity("BeerSession.Models.User", b =>
-                {
-                    b.HasOne("BeerSession.Models.User")
                         .WithMany("MeisterTastings")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("SessionMeisterID");
                 });
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>

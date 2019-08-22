@@ -11,6 +11,7 @@ namespace BeerSession.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public bool MailSent { get; set; }
+        public bool JoinedSession { get; set; }
         public Tasting Tasting { get; set; }
     }
 }

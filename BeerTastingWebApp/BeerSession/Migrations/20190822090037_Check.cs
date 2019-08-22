@@ -2,9 +2,24 @@
 
 namespace BeerSession.Migrations
 {
-    public partial class ListOfMeisters : Migration
+    public partial class Check : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_User_User_UserID",
+                table: "User");
+
+            migrationBuilder.DropIndex(
+                name: "IX_User_UserID",
+                table: "User");
+
+            migrationBuilder.DropColumn(
+                name: "UserID",
+                table: "User");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
                 name: "UserID",
@@ -23,21 +38,6 @@ namespace BeerSession.Migrations
                 principalTable: "User",
                 principalColumn: "ID",
                 onDelete: ReferentialAction.Restrict);
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropForeignKey(
-                name: "FK_User_User_UserID",
-                table: "User");
-
-            migrationBuilder.DropIndex(
-                name: "IX_User_UserID",
-                table: "User");
-
-            migrationBuilder.DropColumn(
-                name: "UserID",
-                table: "User");
         }
     }
 }

@@ -11,7 +11,6 @@ As a session leader I want to have a page that summerizes the tasting with grade
 ##Participant
 As a participant. When I've been invited and don't have a user account. First I need to register.
 
-
 ##User
 As a user I want to be able to rate my beer
 As a user I want to get asynconous updates about the tasting as you go

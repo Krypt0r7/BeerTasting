@@ -2,12 +2,12 @@
 
 namespace BeerSession.Migrations
 {
-    public partial class AddedMailBool : Migration
+    public partial class JoinedSession : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "MailSent",
+                name: "JoinedSession",
                 table: "Participant",
                 nullable: false,
                 defaultValue: false);
@@ -16,7 +16,7 @@ namespace BeerSession.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "MailSent",
+                name: "JoinedSession",
                 table: "Participant");
         }
     }

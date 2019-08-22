@@ -192,6 +192,7 @@ hr{
 
 .card img{
   width: 100px;
+  margin-top: auto;
 }
 
 .participantList {
@@ -353,9 +354,4 @@ button.close {
 
 .beer-form{
   margin-right: 2em;
-}
-
-#beer-name{
-  margin-bottom: auto;
-
 }

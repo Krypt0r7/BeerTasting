@@ -51,6 +51,11 @@ namespace BeerSession
                 option.Password.RequireNonAlphanumeric = false;
             });
 
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.AutomaticAuthentication = false;
+            });
+
             services.AddSignalR();
 
             services.AddRouting(option => option.LowercaseUrls = true);

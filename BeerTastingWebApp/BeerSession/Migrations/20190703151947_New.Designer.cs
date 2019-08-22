@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeerSession.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190521104305_ImageAdded")]
-    partial class ImageAdded
+    [Migration("20190703151947_New")]
+    partial class New
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -71,6 +71,37 @@ namespace BeerSession.Migrations
                     b.ToTable("Participant");
                 });
 
+            modelBuilder.Entity("BeerSession.Models.Review", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BeerID");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("Look");
+
+                    b.Property<int>("OverallRating");
+
+                    b.Property<decimal>("Score");
+
+                    b.Property<int>("Smell");
+
+                    b.Property<int>("Taste");
+
+                    b.Property<int?>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BeerID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Review");
+                });
+
             modelBuilder.Entity("BeerSession.Models.Tasting", b =>
                 {
                     b.Property<int>("ID")
@@ -110,11 +141,15 @@ namespace BeerSession.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getutcdate()");
 
+                    b.Property<int?>("UserID");
+
                     b.Property<string>("UserIdentity");
 
                     b.Property<string>("UserName");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("User");
                 });
@@ -311,11 +346,29 @@ namespace BeerSession.Migrations
                         .HasForeignKey("TastingID");
                 });
 
+            modelBuilder.Entity("BeerSession.Models.Review", b =>
+                {
+                    b.HasOne("BeerSession.Models.Beer", "Beer")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BeerID");
+
+                    b.HasOne("BeerSession.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("BeerSession.Models.Tasting", b =>
                 {
                     b.HasOne("BeerSession.Models.User", "SessionMeister")
                         .WithMany()
                         .HasForeignKey("SessionMeisterID");
+                });
+
+            modelBuilder.Entity("BeerSession.Models.User", b =>
+                {
+                    b.HasOne("BeerSession.Models.User")
+                        .WithMany("MeisterTastings")
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>

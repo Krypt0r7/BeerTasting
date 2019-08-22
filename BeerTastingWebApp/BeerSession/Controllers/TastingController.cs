@@ -88,16 +88,33 @@ namespace BeerSession.Controllers
             return View(tasting);
         }
 
-        public ActionResult CatchParticipant(string tastingId)
+        public async Task<IActionResult> CatchParticipant(string tastingId)
         {
-            var tasting = dbContext.Tasting.AsNoTracking().FirstOrDefault(f => f.TastingTag.ToString() == tastingId);
+            var user = await userManager.GetUserAsync(HttpContext.User);
 
-            return RedirectToAction("Session", tasting);
+            var tasting = dbContext.Tasting.Include(p => p.Participants).FirstOrDefault(f => f.TastingTag.ToString() == tastingId);
+
+            foreach (var item in tasting.Participants)
+            {
+                if (item.Email == user.Email)
+                {
+                    var userDb = await tastingService.GetUserAsync(user);
+                    // tasting.Users.Add(new UserTasting(){Tasting = tasting, User = userDb});
+
+                    var userTasting = new UserTasting(){ Tasting = tasting, User = userDb};
+                    dbContext.UserTasting.Add(userTasting);
+    	            item.JoinedSession = true;
+
+                    dbContext.SaveChanges();
+                }
+            }
+
+            return Redirect("Index");
         }
         [HttpPost]
         public ActionResult Start(Guid tastingTag)
         {
-            var tasting = dbContext.Tasting.Where(f => f.TastingTag == tastingTag).Include(i => i.Beers).ThenInclude(t => t.Reviews).Include(j => j.Users).ThenInclude(t => t.User).AsNoTracking().First();
+            var tasting = dbContext.Tasting.Where(f => f.TastingTag == tastingTag).Include(p => p.Participants).Include(i => i.Beers).ThenInclude(t => t.Reviews).Include(j => j.Users).ThenInclude(t => t.User).AsNoTracking().First();
             return View(tasting);
         }
 
