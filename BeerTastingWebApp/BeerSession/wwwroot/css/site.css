@@ -74,6 +74,10 @@ hr{
   text-align: center;
 }
 
+.bold{
+  font-weight: bold;
+}
+
 .column{
   flex-direction: column
 }
@@ -140,9 +144,6 @@ hr{
   background-color: #ddd;
 }
 
-.sessions-table{
-  width: 60%;
-}
 
 @media (max-width: 800px){
   .sessions-table{
@@ -191,8 +192,8 @@ hr{
 }
 
 .card img{
-  width: 100px;
   margin-top: auto;
+  max-height: 200px;
 }
 
 .participantList {
@@ -248,14 +249,14 @@ hr{
   display: flex;
   flex-direction: column;
   text-align: center;
+  align-items: center;
+  width: 100%;
 }
 .buttons{
   display:flex;
   max-width: 500px;
-  margin-right: auto;
-  margin-left: auto;
-  justify-content: space-between;
-  width: 70%;
+  justify-content: space-evenly;
+  width: 100%;
 }
 
 .header-text{
@@ -354,4 +355,37 @@ button.close {
 
 .beer-form{
   margin-right: 2em;
+}
+
+.tabContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tab{
+  overflow: hidden;
+  background-color: #f1f1f1;
+  display: flex;
+}
+
+.tablinks{
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 1em 1.2em;
+  transition: 0.3s;
+}
+.tablinks:hover{
+  background-color: #ddd;
+}
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabContent{
+  display: none;
+  padding: 6px 12px;
+  
 }

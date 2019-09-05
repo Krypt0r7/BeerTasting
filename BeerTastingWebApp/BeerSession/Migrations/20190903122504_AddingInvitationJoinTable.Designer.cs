@@ -4,14 +4,16 @@ using BeerSession.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BeerSession.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190903122504_AddingInvitationJoinTable")]
+    partial class AddingInvitationJoinTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,13 +167,13 @@ namespace BeerSession.Migrations
 
             modelBuilder.Entity("BeerSession.Models.UserTasting", b =>
                 {
-                    b.Property<int>("TastingID");
+                    b.Property<int>("TastingId");
 
-                    b.Property<int>("UserID");
+                    b.Property<int>("UserId");
 
-                    b.HasKey("TastingID", "UserID");
+                    b.HasKey("TastingId", "UserId");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserTasting");
                 });
@@ -390,12 +392,12 @@ namespace BeerSession.Migrations
                 {
                     b.HasOne("BeerSession.Models.Tasting", "Tasting")
                         .WithMany("Users")
-                        .HasForeignKey("TastingID")
+                        .HasForeignKey("TastingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BeerSession.Models.User", "User")
                         .WithMany("Tastings")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

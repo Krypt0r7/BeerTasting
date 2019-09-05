@@ -48,6 +48,26 @@ namespace BeerSession.Hubs
             await Clients.Caller.SendAsync("GetParticipant", name, email);
         }
 
+        public async Task GetUsers()
+        {
+            var users = await dbContext.User.ToListAsync();
+            var json = JsonConvert.SerializeObject(users);
+            await Clients.Caller.SendAsync("ListUsers",json);
+        }
+
+        public async Task AddUserInvitation(string email, string tastingId)
+        {
+            var user = await dbContext.User.FirstAsync(f => f.Email == email);
+            var tasting = await dbContext.Tasting.FirstAsync(f => f.TastingTag.ToString() == tastingId);
+
+            var invitation = new Invitation(){
+                Tasting = tasting,
+                User = user
+            };
+            await dbContext.AddAsync(invitation);
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task CreateRoom(string tastingId)
         { 
             await Groups.AddToGroupAsync(Context.ConnectionId, tastingId);

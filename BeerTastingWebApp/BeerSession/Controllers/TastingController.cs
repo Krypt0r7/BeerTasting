@@ -98,16 +98,18 @@ namespace BeerSession.Controllers
             {
                 if (item.Email == user.Email)
                 {
-                    var userDb = await tastingService.GetUserAsync(user);
+                    var userDb = dbContext.User.First(f => f.UserIdentity == user.Id);
+                    // var userDb = await tastingService.GetUserAsync(user);
                     // tasting.Users.Add(new UserTasting(){Tasting = tasting, User = userDb});
 
                     var userTasting = new UserTasting(){ Tasting = tasting, User = userDb};
-                    dbContext.UserTasting.Add(userTasting);
+                    await dbContext.AddAsync(userTasting);
+                    
     	            item.JoinedSession = true;
 
-                    dbContext.SaveChanges();
                 }
             }
+            await dbContext.SaveChangesAsync();
 
             return Redirect("Index");
         }

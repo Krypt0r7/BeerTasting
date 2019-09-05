@@ -4,48 +4,67 @@
     ViewData["Title"] = "Tasting";
 }
 
+<div class="tabContainer">
 
-<div class="content-container column center">
-    <table class="table table-striped sessions-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Enter</th>
-                <th>Remove</th>
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'mySessions')">My Sessions</button>
+        <button class="tablinks" onclick="openTab(event, 'joinedSessions')">Joined Sessions</button>
+        <button class="tablinks" onclick="openTab(event, 'invitations')">Invitations</button>
+    </div>
 
-            </tr>
-        </thead>
-        <tbody>
+    <div id="mySessions" class="tabContent">
+        <div class="content-container column center">
+            <table class="table table-striped sessions-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Enter</th>
+                        <th>Remove</th>
 
-            @if (Model.MeisterTastings != null)
-            {
-                @foreach (var item in Model.MeisterTastings)
-                {
-                <tr>
-                    <td>@item.ID</td>
-                    <td>@item.Name</td>
-                    <td>
-                        <form method="post" asp-action="session" asp-controller="Tasting">
-                            <input type="hidden" name="tastingId" value="@item.TastingTag" />
-                            <Button type="submit" class="button-primary no-margin">Show session</Button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="post" asp-action="RemoveTasting" asp-controller="Tasting">
-                            <input type="hidden" name="tastingId" value="@item.TastingTag" />
-                            <button type="submit" class="button-primary no-margin">Remove session</button>
-                        </form>
-                    </td>
-                </tr>
-                }
-            }
-            else
-            {
-                <p>No sessions</p>
-            }
-        </tbody>
-    </table>
-    <p>or</p>
-    <a class="btn" asp-action="newtasting">Create new session</a>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    @if (Model.MeisterTastings != null)
+                    {
+                        @foreach (var item in Model.MeisterTastings)
+                        {
+                        <tr>
+                            <td>@item.ID</td>
+                            <td>@item.Name</td>
+                            <td>
+                                <form method="post" asp-action="session" asp-controller="Tasting">
+                                    <input type="hidden" name="tastingId" value="@item.TastingTag" />
+                                    <Button type="submit" class="button-primary no-margin">Show session</Button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" asp-action="RemoveTasting" asp-controller="Tasting">
+                                    <input type="hidden" name="tastingId" value="@item.TastingTag" />
+                                    <button type="submit" class="button-primary no-margin">Remove session</button>
+                                </form>
+                            </td>
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <p>No sessions</p>
+                    }
+                </tbody>
+            </table>
+            <p>or</p>
+            <a class="btn" asp-action="newtasting">Create new session</a>
+        </div>
+    </div>
+
+    <div id="joinedSessions" class="tabContent">
+        <h2>This is your joined Sessions</h2>
+    </div>
+
+
+    <div id="invitations" class="tabContent">
+        <h2>This is your invitations</h2>
+    </div>
 </div>

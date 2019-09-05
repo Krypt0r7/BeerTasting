@@ -49,7 +49,7 @@ namespace BeerSession.Data.TastingService
 
         public async Task<User> GetUserAsync(IdentityUser user)
         {
-            var userDb = dbContext.User.Include(i => i.MeisterTastings).FirstOrDefault(f => f.UserIdentity == user.Id);
+            var userDb = dbContext.User.AsNoTracking().Include(i => i.MeisterTastings).Include(i => i.Tastings).ThenInclude(t => t.Tasting).FirstOrDefault(f => f.UserIdentity == user.Id);
             // var userDb = await dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).Include(i => i.MeisterTastings).FirstOrDefaultAsync(f => f.UserIdentity == user.Id);
             if (userDb == null)
             {
@@ -64,7 +64,7 @@ namespace BeerSession.Data.TastingService
                 dbContext.Add(newUser);
                 await dbContext.SaveChangesAsync();
 
-                userDb = dbContext.User.Include(i => i.Tastings).ThenInclude(i => i.Tasting).Include(i => i.MeisterTastings).FirstOrDefault(f => f.UserIdentity == user.Id);
+                userDb = dbContext.User.AsNoTracking().Include(i => i.Tastings).ThenInclude(i => i.Tasting).Include(i => i.MeisterTastings).FirstOrDefault(f => f.UserIdentity == user.Id);
             }
 
             return userDb;

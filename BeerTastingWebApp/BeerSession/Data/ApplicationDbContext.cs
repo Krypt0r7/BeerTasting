@@ -15,11 +15,14 @@ namespace BeerSession.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<UserTasting>().HasKey(sc => new { sc.TastingId, sc.UserId });
+            builder.Entity<UserTasting>().HasKey(sc => new { sc.TastingID, sc.UserID });
 
-            builder.Entity<UserTasting>().HasOne(us => us.User).WithMany(t => t.Tastings).HasForeignKey(f => f.UserId);
+            builder.Entity<UserTasting>().HasOne(us => us.User).WithMany(t => t.Tastings).HasForeignKey(f => f.UserID);
 
-            builder.Entity<UserTasting>().HasOne(us => us.Tasting).WithMany(t => t.Users).HasForeignKey(f => f.TastingId);
+
+            builder.Entity<UserTasting>().HasOne(us => us.Tasting).WithMany(t => t.Users).HasForeignKey(f => f.TastingID);
+
+            builder.Entity<Invitation>().HasKey(sc => new { sc.TastingID, sc.UserID});
 
             builder.Entity<Tasting>().Property("DateCreated").HasDefaultValueSql("getutcdate()");
 

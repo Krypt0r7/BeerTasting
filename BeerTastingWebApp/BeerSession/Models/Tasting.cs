@@ -17,6 +17,7 @@ namespace BeerSession.Models
         public ICollection<Participant> Participants { get; set; }
         public List<UserTasting> Users { get; set; }
         public ICollection<Beer> Beers { get; set; }
+        public List<Invitation> Invitations { get; set; }
         public User SessionMeister { get; set; }
     }
 }

@@ -13,13 +13,6 @@ function listTheBeers(array) {
         option.value = x;
         listOfBeer.appendChild(option)
     });
-
-
-    // for (var i = 0; i < array.length; i++) {
-    //     var option = document.createElement("option");
-    //     option.value = array[i];
-    //     listOfBeer.appendChild(option);
-    // }
 }
 
 function clearListofBeers(list) {
@@ -35,10 +28,6 @@ function populateInputFields(array) {
     document.getElementById("alcohol").value = array.alkoholhalt;
 }
 
-// $("#myModal").on('hidden.bs.modal', function () {
-//     clearListofBeers(document.getElementById("inputGroupSelect01"));
-//     document.getElementById("prodInput").value = "";
-// })
 
 function goBack() {
     window.history.back();
@@ -50,9 +39,7 @@ function populateProducerList(dataList, array){
         option.textContent = x;
         dataList.appendChild(option);
     });
-
 }
-
 
 function showModal(){
     let modal = document.querySelector("#systemet-modal");
@@ -70,3 +57,19 @@ function showModal(){
         modal.style.display = "none";
     }
 }
+
+function openTab(event, name) {
+    let tabContent = document.querySelectorAll(".tabContent");
+    for (let i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none"
+    }
+
+    let links = document.querySelectorAll(".tablinks");
+    for (let i = 0; i < links.length; i++) {
+        links[i].classList.remove("active");
+    }
+
+    document.getElementById(name).style.display = "block";
+    event.currentTarget.classList.add("active");
+}
+

@@ -17,6 +17,7 @@ using BeerSession.Hubs;
 using BeerSession.Data.BeerService;
 using BeerSession.Data.TastingService;
 using BeerSession.Data.ParticipantService;
+using BeerSession.Data.UserService;
 
 namespace BeerSession
 {
@@ -65,6 +66,7 @@ namespace BeerSession
             services.AddTransient<IBeerGetter, BeerGetter>();
             services.AddTransient<ITastingService, TastingService>();
             services.AddTransient<IParticipantTools, ParticipantTools>();
+            services.AddTransient<IUserService, UserService>();
            
             services.AddDistributedMemoryCache();
             

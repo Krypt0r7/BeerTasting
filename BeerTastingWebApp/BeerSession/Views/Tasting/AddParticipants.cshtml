@@ -19,8 +19,9 @@
             <input type="hidden" value="@Model.TastingTag.ToString()" id="tastingId" />
             <input type="button" id="participantButton" class="button-primary" value="Add participant"/>
         </div>
-        <div>
-            <input list="user-list" type="text">
+        <p class="bold">Add a existing user to your session:</p>
+        <div class="form-group">
+            <input list="user-list" id="user-list-input" type="text">
             <datalist id="user-list">
                 @if (@Model.Users.Count != 0)
                 {
@@ -31,6 +32,7 @@
                 }
             </datalist>
         </div>
+        <button class="button-primary" id="invitationSendButton">Send invitation</button>
         <div class="mt-4">
             <form asp-action="AddBeers" asp-controller="Tasting" method="post">
                 <input name="tastingId" type="hidden" value="@Model.TastingTag.ToString()" />

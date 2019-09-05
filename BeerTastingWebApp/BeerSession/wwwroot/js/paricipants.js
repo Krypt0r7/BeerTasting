@@ -42,9 +42,20 @@ connection.on("GetParticipant", function (name, email) {
     document.getElementById("emailPart").value = "";
 });
 
+connection.on("ListUsers", function (users){
+    let dataList = document.querySelector("#user-list");
+    let objects = JSON.parse(users);
+    objects.forEach(el => {
+        let opt = document.createElement("option");
+        opt.textContent = el.UserName;
+        dataList.appendChild(opt);
+    });
+});
+
 connection.start().then(function () {
     document.getElementById("participantButton").disabled = false;
     setupGroup();
+    gettingUsers();
 }).catch(function (err) {
     return console.error(err.toString());
     });
@@ -68,9 +79,24 @@ document.getElementById("participantButton").addEventListener("click", function 
     event.preventDefault();
 });
 
+document.querySelector("#invitationSendButton").addEventListener("click", function (event){
+    let user = document.querySelector("#user-list-input").value;
+    let tasting = document.getElementById("tastingId").value;
+    connection.invoke("AddUserInvitation", user, tasting).catch(function (err){
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+});
+
 function setupGroup() {
     var tastingId = document.getElementById("tastingId").value;
     connection.invoke("CreateRoom", tastingId).catch(function (err) {
         return console.error(err.toString());
     });
-}
+};
+
+function gettingUsers(){
+    connection.invoke("GetUsers").catch(function (err){
+        return console.error(err.toString());
+    });
+};

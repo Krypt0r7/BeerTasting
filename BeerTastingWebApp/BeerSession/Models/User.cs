@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace BeerSession.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         public DateTime SignedUp { get; private set; }
+        public IList<Invitation> Invitaions {get; set;}
         public IList<UserTasting> Tastings { get; set; }
         public IList<Tasting> MeisterTastings { get; set; }
     }
